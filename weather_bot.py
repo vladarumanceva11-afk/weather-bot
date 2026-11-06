@@ -2,7 +2,7 @@ import httpx
 import random
 import json
 import os
-from datetime import datetime, timedelta
+from datetime import datetime
 from telegram import Update, KeyboardButton, ReplyKeyboardMarkup
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 
@@ -18,6 +18,7 @@ CAT_IMAGES = {
     "Default": "https://images.unsplash.com/photo-1519052537078-e6302a4968d4?w=600"
 }
 
+# Фразы котика
 CAT_PHRASES = {
     "Clear": ["Мяу! Солнце светит, я греюсь на подоконнике! ☀️🐈", "Ура, гулять! Пойдем ловить бабочек? 🦋🐾"],
     "Clouds": ["Мяу... Пасмурно. Я лучше посплю на твоих коленях. 😴☁️", "Хмурое небо, но мне всё равно тепло рядом с тобой. 🐱💤"],
@@ -26,13 +27,15 @@ CAT_PHRASES = {
     "Default": ["Мяу! Накорми меня, пожалуйста! 🐾", "Я сегодня самый милый кот на свете, погладь меня! 🐱✨"]
 }
 
-# Файл для сохранения времени кормления
 DB_FILE = "cat_data.json"
 
 def load_data():
     if os.path.exists(DB_FILE):
-        with open(DB_FILE, "r") as f:
-            return json.load(f)
+        try:
+            with open(DB_FILE, "r") as f:
+                return json.load(f)
+        except:
+            return {}
     return {}
 
 def save_data(data):
@@ -49,7 +52,27 @@ def get_advice(temp):
     elif temp <= 25: return "👕 Тепло, можно в футболке."
     else: return "🩳 Жарко, пейте больше воды и не забудьте панамку!"
 
-async def get_weather(update: Update, context: ContextTypes.DEFAULT_TYPE, city=None):
+# Функция кормления
+async def feed_cat(update: Update):
+    user_id = str(update.effective_user.id)
+    db = load_data()
+    last_fed = db.get(user_id, 0)
+    time_passed = datetime.now().timestamp() - last_fed
+
+    if time_passed < 300: # Если кормили меньше 5 минут назад
+        await update.message.reply_text("Мяу! Я уже сыт, но спасибо! 😸 Не перекорми меня!")
+        return
+        
+    db[user_id] = datetime.now().timestamp()
+    save_data(db)
+    caption = "😻 <b>Муррр! Спасибо за вкусняшку!</b>\nЯ всё съел и теперь довольный сплю. 💤🐾"
+    try:
+        await update.message.reply_photo(photo="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=600", caption=caption, parse_mode="HTML")
+    except Exception:
+        await update.message.reply_text(caption, parse_mode="HTML")
+
+# Функция погоды
+async def get_weather(update: Update, city=None):
     params = {"appid": WEATHER_API_KEY, "q": city, "units": "metric", "lang": "ru"}
     async with httpx.AsyncClient() as client:
         r = await client.get("https://api.openweathermap.org/data/2.5/weather", params=params)
@@ -65,29 +88,15 @@ async def get_weather(update: Update, context: ContextTypes.DEFAULT_TYPE, city=N
         # Проверяем, голоден ли котик
         user_id = str(update.effective_user.id)
         db = load_data()
-        last_fed = db.get(user_id, datetime.now().timestamp() - 10000) # Если не кормили, считаем голодным
-        
+        last_fed = db.get(user_id, 0)
         time_passed = datetime.now().timestamp() - last_fed
+        
         hunger_status = ""
         if time_passed > 7200: # 2 часа
-            hunger_status = "\n\n😿 <b>Мяу... Я очень голодный! Напиши 'Покормить'!</b>"
+            hunger_status = "\n\n😿 <b>Мяу... Я очень голодный! Нажми 'Покормить котика'!</b>"
             cat_phrase = "Мяу-у-у... Дай мне рыбку, пожалуйста..."
         else:
             cat_phrase = get_cat_phrase(main_weather)
-        
-        # Если город не передан (пришел текст "Покормить"), не шлем погоду, шлем только кота
-        if city == "Покормить":
-            if time_passed < 300: # Если кормили меньше 5 минут назад
-                await update.message.reply_text("Мяу! Я уже сыт, но спасибо! 😸 Не перекорми меня!")
-                return
-            db[user_id] = datetime.now().timestamp()
-            save_data(db)
-            caption = "😻 <b>Муррр! Спасибо за вкусняшку!</b>\nЯ всё съел и теперь довольный сплю. 💤🐾"
-            try:
-                await update.message.reply_photo(photo="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=600", caption=caption, parse_mode="HTML")
-            except Exception:
-                await update.message.reply_text(caption, parse_mode="HTML")
-            return
 
         caption = (
             f"🌍 Погода в <b>{data['name']}</b>: {temp}°C, {desc}\n"
@@ -103,11 +112,13 @@ async def get_weather(update: Update, context: ContextTypes.DEFAULT_TYPE, city=N
     else:
         await update.message.reply_text("❌ Город не найден. Проверь название.")
 
+# Обработчик текста
 async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = update.message.text
     
-    if text.lower() == "покормить":
-        await get_weather(update, context, city="Покормить")
+    # Если нажали кнопку или написали "Покормить"
+    if "покормить" in text.lower():
+        await feed_cat(update)
         return
         
     if text.startswith("🐱") or "Мяу" in text:
@@ -115,7 +126,20 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
         
     context.user_data['last_city'] = text
-    await get_weather(update, context, city=text)
+    await get_weather(update, city=text)
+
+# Обработчик геолокации
+async def handle_location(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    loc = update.message.location
+    params = {"appid": WEATHER_API_KEY, "lat": loc.latitude, "lon": loc.longitude, "units": "metric", "lang": "ru"}
+    async with httpx.AsyncClient() as client:
+        r = await client.get("https://api.openweathermap.org/data/2.5/weather", params=params)
+    if r.status_code == 200:
+        data = r.json()
+        temp = round(data['main']['temp'])
+        await update.message.reply_text(f"📍 Погода по геолокации:\n🌡 {temp}°C в {data['name']}")
+    else:
+        await update.message.reply_text("❌ Не удалось определить погоду.")
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [
@@ -132,6 +156,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 def main():
     app = Application.builder().token(TELEGRAM_TOKEN).build()
     app.add_handler(CommandHandler("start", start))
+    app.add_handler(MessageHandler(filters.LOCATION, handle_location))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_text))
     print("Бот запущен")
     app.run_polling()
