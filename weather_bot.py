@@ -5,14 +5,12 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters, C
 TELEGRAM_TOKEN = "9246784802:AAHxP96JoEXmjE_nmsWU12Pgm_TmV-LWghM"
 WEATHER_API_KEY = "faedfd8d0fe879aab4f6d34c818ccb55"
 
-# Ссылки на красивые картинки для разной погоды
 IMAGES = {
-    "Clear": "https://images.unsplash.com/photo-1601297183305-6df142704ea2?w=800", # Солнце
-    "Clouds": "https://images.unsplash.com/photo-1534088568595-a066f410cbda?w=800", # Облака
-    "Rain": "https://images.unsplash.com/photo-1519692933481-e162a57d6721?w=800",   # Дождь
-    "Snow": "https://images.unsplash.com/photo-1478265409131-1f65c88f965c?w=800",   # Снег
-    "Thunderstorm": "https://images.unsplash.com/photo-1605727216801-e27ce1d0cc28?w=800", # Гроза
-    "Default": "https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?w=800" # На всякий случай
+    "Clear": "https://images.unsplash.com/photo-1601297183305-6df142704ea2?q=80&w=600&auto=format&fit=crop",
+    "Clouds": "https://images.unsplash.com/photo-1534088568595-a066f410cbda?q=80&w=600&auto=format&fit=crop",
+    "Rain": "https://images.unsplash.com/photo-1519692933481-e162a57d6721?q=80&w=600&auto=format&fit=crop",
+    "Snow": "https://images.unsplash.com/photo-1478265409131-1f65c88f965c?q=80&w=600&auto=format&fit=crop",
+    "Default": "https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?q=80&w=600&auto=format&fit=crop"
 }
 
 def get_advice(temp):
@@ -47,8 +45,10 @@ async def get_weather(update: Update, context: ContextTypes.DEFAULT_TYPE, city=N
                 f"📝 Ожидается: {desc}\n\n"
                 f"{get_advice(temp)}"
             )
-            # Отправляем картинку с текстом (подписью)
-            await update.message.reply_photo(photo=image_url, caption=caption, parse_mode="HTML")
+            try:
+                await update.message.reply_photo(photo=image_url, caption=caption, parse_mode="HTML")
+            except Exception:
+                await update.message.reply_text(caption, parse_mode="HTML")
         else:
             await update.message.reply_text("❌ Не удалось получить прогноз.")
     else:
@@ -74,8 +74,10 @@ async def get_weather(update: Update, context: ContextTypes.DEFAULT_TYPE, city=N
                 f"💨 Ветер: {wind} м/с\n\n"
                 f"{get_advice(temp)}"
             )
-            # Отправляем картинку с текстом
-            await update.message.reply_photo(photo=image_url, caption=caption, parse_mode="HTML")
+            try:
+                await update.message.reply_photo(photo=image_url, caption=caption, parse_mode="HTML")
+            except Exception:
+                await update.message.reply_text(caption, parse_mode="HTML")
         else:
             await update.message.reply_text("❌ Город не найден. Проверь название.")
 
