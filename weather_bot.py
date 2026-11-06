@@ -10,16 +10,29 @@ async def get_weather(update: Update, context):
     params = {"appid": WEATHER_API_KEY, "q": city, "units": "metric", "lang": "ru"}
     async with httpx.AsyncClient() as client:
         r = await client.get("https://api.openweathermap.org/data/2.5/weather", params=params)
+    
     if r.status_code == 200:
         data = r.json()
         temp = round(data['main']['temp'])
-        await update.message.reply_text(f"В {data['name']}: {temp} градусов")
+        feels_like = round(data['main']['feels_like'])
+        humidity = data['main']['humidity']
+        wind = data['wind']['speed']
+        desc = data['weather'][0]['description'].capitalize()
+        
+        weather_text = (
+            f"🌍 Город: <b>{data['name']}</b>\n\n"
+            f"🌡 Температура: <b>{temp}°C</b> (ощущается как {feels_like}°C)\n"
+            f"☁️ На улице: {desc}\n"
+            f"💧 Влажность: {humidity}%\n"
+            f"💨 Ветер: {wind} м/с"
+        )
+        await update.message.reply_text(weather_text, parse_mode="HTML")
     else:
-        await update.message.reply_text("Город не найден")
+        await update.message.reply_text("❌ Город не найден. Проверь название.")
 
 def main():
     app = Application.builder().token(TELEGRAM_TOKEN).build()
-    app.add_handler(CommandHandler("start", lambda u, c: u.message.reply_text("Привет! Напиши город")))
+    app.add_handler(CommandHandler("start", lambda u, c: u.message.reply_text("Привет! Напиши город, и я скажу погоду 🌤")))
     app.add_handler(MessageHandler(filters.TEXT, get_weather))
     print("Бот запущен")
     app.run_polling()
