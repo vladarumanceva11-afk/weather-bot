@@ -28,7 +28,6 @@ def run_server():
 threading.Thread(target=run_server, daemon=True).start()
 # ----------------------------------
 
-# Костюмы (включая секретный)
 SKINS = {
     "default": {"name": "Дворовый", "price": 0, "image": "https://images.unsplash.com/photo-1519052537078-e6302a4968d4?w=600"},
     "gentleman": {"name": "Джентльмен", "price": 500, "image": "https://images.unsplash.com/photo-1533738363-b7f9aef128ce?w=600"},
@@ -38,7 +37,6 @@ SKINS = {
     "secret": {"name": "??? (В разработке)", "price": 99999, "image": "https://images.unsplash.com/photo-1519052537078-e6302a4968d4?w=600"} 
 }
 
-# Взрослые факты
 FACTS = [
     "Знаете ли вы, что скорость звука в воздухе составляет около 343 м/с?",
     "Атмосферное давление на уровне моря составляет 760 мм рт. ст. Если оно падает — жди перемены погоды.",
@@ -50,7 +48,6 @@ FACTS = [
     "Самый сухой континент — Австралия."
 ]
 
-# Взрослые вечерние мысли
 EVENING_PHRASES = [
     "Вечер — это время, когда можно наконец выдохнуть и заняться собой.",
     "Пусть этот вечер пройдет в тишине и спокойствии. Вы это заслужили.",
@@ -409,4 +406,8 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if not await check_subscription(update.effective_user.id, context):
         keyboard = [[InlineKeyboardButton("📢 Подписаться", url=f"https://t.me/{CHANNEL_USERNAME.replace('@', '')}")], [InlineKeyboardButton("✅ Я подписался", callback_data="check_sub")]]
-        await update.message.reply_text("Добро пожаловать. Для начала подпишись на наш канал. 👇", reply_markup=InlineKeyboar
+        await update.message.reply_text("Добро пожаловать. Для начала подпишись на наш канал. 👇", reply_markup=InlineKeyboardMarkup(keyboard))
+        return
+
+    keyboard = [
+        [KeyboardButt
