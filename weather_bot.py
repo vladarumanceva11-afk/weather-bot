@@ -48,7 +48,6 @@ FACTS = [
     "Уши кота могут поворачиваться на 180 градусов, чтобы лучше слышать. 👂"
 ]
 
-# Новые вечерние фразы
 EVENING_PHRASES = [
     "Пусть твой вечер будет таким же уютным, как клубок пряжи. 🧶🐾",
     "Время снять усталость и обнять котика. Хорошего вечера! 🌙",
@@ -148,7 +147,6 @@ def get_advice(temp):
     elif temp <= 25: return "👕 Тепло, можно в футболке."
     else: return "🩳 Жарко, пейте больше воды!"
 
-# --- УТРЕННЯЯ РАССЫЛКА ---
 async def send_daily_fact(context: ContextTypes.DEFAULT_TYPE):
     fact = random.choice(FACTS)
     text = f"🌅 <b>Доброе утро!</b>\n\n<b>Факт дня:</b>\n<i>{fact}</i>\n\nХорошего вам дня! 🐱"
@@ -157,7 +155,6 @@ async def send_daily_fact(context: ContextTypes.DEFAULT_TYPE):
     except Exception as e:
         print(f"Ошибка: {e}")
 
-# --- ВЕЧЕРНЯЯ РАССЫЛКА ---
 async def send_evening_message(context: ContextTypes.DEFAULT_TYPE):
     phrase = random.choice(EVENING_PHRASES)
     text = f"🌙 <b>Добрый вечер!</b>\n\n<i>{phrase}</i>\n\nСладких снов! 🐾"
@@ -275,35 +272,55 @@ async def prediction(update: Update):
         await update.message.reply_text(caption, parse_mode="HTML")
 
 async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    text = update.message.text
+    text = update.message.text.lower()
+    
     if not await check_subscription(update.effective_user.id, context):
         keyboard = [[InlineKeyboardButton("📢 Подписаться", url=f"https://t.me/{CHANNEL_USERNAME.replace('@', '')}")], [InlineKeyboardButton("✅ Я подписался", callback_data="check_sub")]]
         await update.message.reply_text("Мяу! Подпишись на наш канал! 👇", reply_markup=InlineKeyboardMarkup(keyboard))
         return
+
+    # Ответы на приветствия и простые фразы
+    greetings = ["привет", "здравствуй", "хай", "добрый день", "добрый вечер", "доброе утро", "приветик"]
+    if any(word in text for word in greetings):
+        await update.message.reply_text(f"Привет, {get_display_name(update.effective_user)}! 👋 Мяу! Как у тебя дела? Напиши название города, чтобы узнать погоду, или выбери кнопку ниже! 🐱")
+        return
         
-    if "покормить" in text.lower(): await feed_cat(update)
-    elif "предсказание" in text.lower(): await prediction(update)
-    elif "статистика" in text.lower(): await show_stats(update)
-    elif "топ" in text.lower(): await show_leaderboard(update)
-    elif "бонус" in text.lower(): await daily_bonus(update)
-    elif "погода" in text.lower(): 
+    if "как дела" in text:
+        await update.message.reply_text("Мурр! У меня всё отлично, я сыт и сплю на подоконнике. А у тебя как? 😸")
+        return
+        
+    if "спасибо" in text or "благодарю" in text:
+        await update.message.reply_text("Муррр! Всегда пожалуйста! 😽 Обращайся!")
+        return
+        
+    if "пока" in text or "до свидания" in text:
+        await update.message.reply_text("Мяу! До встречи! Буду ждать тебя! 🐾👋")
+        return
+
+    # Обработка кнопок
+    if "покормить" in text: await feed_cat(update)
+    elif "предсказание" in text: await prediction(update)
+    elif "статистика" in text: await show_stats(update)
+    elif "топ" in text: await show_leaderboard(update)
+    elif "бонус" in text: await daily_bonus(update)
+    elif "погода" in text: 
         await update.message.reply_text("🌍 Напиши название города, и я пришлю погоду и котика!")
-    elif "ещё" in text.lower() or "меню" in text.lower():
+    elif "ещё" in text or "меню" in text:
         keyboard = [
             [KeyboardButton("🔮 Предсказание"), KeyboardButton("📊 Статистика")],
             [KeyboardButton("🏆 Топ игроков"), KeyboardButton("⬅️ Назад")]
         ]
         await update.message.reply_text("🎮 Дополнительное меню:", reply_markup=ReplyKeyboardMarkup(keyboard, resize_keyboard=True))
-    elif "назад" in text.lower():
+    elif "назад" in text:
         keyboard = [
             [KeyboardButton("🌍 Погода"), KeyboardButton("🐟 Покормить котика")],
             [KeyboardButton("🎁 Ежедневный бонус"), KeyboardButton("🎮 Ещё")]
         ]
         await update.message.reply_text("Главное меню:", reply_markup=ReplyKeyboardMarkup(keyboard, resize_keyboard=True))
-    elif text.startswith("🐱") or "Мяу" in text: await update.message.reply_text("Муррр! Спасибо тебе! 😽")
+    elif text.startswith("🐱") or "мяу" in text: await update.message.reply_text("Муррр! Спасибо тебе! 😽")
     else:
-        context.user_data['last_city'] = text
-        await get_weather(update, city=text)
+        context.user_data['last_city'] = update.message.text
+        await get_weather(update, city=update.message.text)
 
 async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
@@ -344,10 +361,7 @@ def main():
     app.add_handler(CallbackQueryHandler(button_callback))
     
     job_queue = app.job_queue
-    # Утренний факт в 8:00 по твоему времени (5:00 UTC)
     job_queue.run_daily(send_daily_fact, time=time(hour=5, minute=0))
-    
-    # Вечернее сообщение в 20:00 по твоему времени (17:00 UTC)
     job_queue.run_daily(send_evening_message, time=time(hour=17, minute=0))
     
     print("Бот запущен")
