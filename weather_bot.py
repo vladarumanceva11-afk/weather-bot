@@ -48,6 +48,16 @@ FACTS = [
     "Уши кота могут поворачиваться на 180 градусов, чтобы лучше слышать. 👂"
 ]
 
+# Новые вечерние фразы
+EVENING_PHRASES = [
+    "Пусть твой вечер будет таким же уютным, как клубок пряжи. 🧶🐾",
+    "Время снять усталость и обнять котика. Хорошего вечера! 🌙",
+    "За окном вечер, а значит пора пить чай и отдыхать. ☕️🐱",
+    "Пусть сегодняшний вечер принесет спокойствие и тепло. ✨",
+    "Котик уже свернулся калачиком. А ты готов отдохнуть? 💤",
+    "Отличный повод закончить дела пораньше и полежать в обнимку с любимцем. 🐈"
+]
+
 CAT_PHRASES = {
     "Clear": ["Мяу! Солнце светит, я греюсь на подоконнике! ☀️🐈", "Ура, гулять! Пойдем ловить бабочек? 🦋🐾"],
     "Clouds": ["Мяу... Пасмурно. Я лучше посплю на твоих коленях. 😴☁️", "Хмурое небо, но мне всё равно тепло рядом с тобой. 🐱💤"],
@@ -138,11 +148,21 @@ def get_advice(temp):
     elif temp <= 25: return "👕 Тепло, можно в футболке."
     else: return "🩳 Жарко, пейте больше воды!"
 
+# --- УТРЕННЯЯ РАССЫЛКА ---
 async def send_daily_fact(context: ContextTypes.DEFAULT_TYPE):
     fact = random.choice(FACTS)
     text = f"🌅 <b>Доброе утро!</b>\n\n<b>Факт дня:</b>\n<i>{fact}</i>\n\nХорошего вам дня! 🐱"
     try:
         await context.bot.send_photo(chat_id=CHANNEL_USERNAME, photo="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=600", caption=text, parse_mode="HTML")
+    except Exception as e:
+        print(f"Ошибка: {e}")
+
+# --- ВЕЧЕРНЯЯ РАССЫЛКА ---
+async def send_evening_message(context: ContextTypes.DEFAULT_TYPE):
+    phrase = random.choice(EVENING_PHRASES)
+    text = f"🌙 <b>Добрый вечер!</b>\n\n<i>{phrase}</i>\n\nСладких снов! 🐾"
+    try:
+        await context.bot.send_photo(chat_id=CHANNEL_USERNAME, photo="https://images.unsplash.com/photo-1519052537078-e6302a4968d4?w=600", caption=text, parse_mode="HTML")
     except Exception as e:
         print(f"Ошибка: {e}")
 
@@ -261,7 +281,6 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("Мяу! Подпишись на наш канал! 👇", reply_markup=InlineKeyboardMarkup(keyboard))
         return
         
-    # Обработка кнопок
     if "покормить" in text.lower(): await feed_cat(update)
     elif "предсказание" in text.lower(): await prediction(update)
     elif "статистика" in text.lower(): await show_stats(update)
@@ -270,14 +289,12 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif "погода" in text.lower(): 
         await update.message.reply_text("🌍 Напиши название города, и я пришлю погоду и котика!")
     elif "ещё" in text.lower() or "меню" in text.lower():
-        # Меню "Ещё"
         keyboard = [
             [KeyboardButton("🔮 Предсказание"), KeyboardButton("📊 Статистика")],
             [KeyboardButton("🏆 Топ игроков"), KeyboardButton("⬅️ Назад")]
         ]
         await update.message.reply_text("🎮 Дополнительное меню:", reply_markup=ReplyKeyboardMarkup(keyboard, resize_keyboard=True))
     elif "назад" in text.lower():
-        # Возврат в главное меню
         keyboard = [
             [KeyboardButton("🌍 Погода"), KeyboardButton("🐟 Покормить котика")],
             [KeyboardButton("🎁 Ежедневный бонус"), KeyboardButton("🎮 Ещё")]
@@ -309,7 +326,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("Привет! Чтобы пользоваться ботом, подпишись на наш канал! 👇", reply_markup=InlineKeyboardMarkup(keyboard))
         return
 
-    # ГЛАВНОЕ МЕНЮ (4 кнопки)
     keyboard = [
         [KeyboardButton("🌍 Погода"), KeyboardButton("🐟 Покормить котика")],
         [KeyboardButton("🎁 Ежедневный бонус"), KeyboardButton("🎮 Ещё")]
@@ -326,8 +342,14 @@ def main():
     app.add_handler(CommandHandler("start", start))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_text))
     app.add_handler(CallbackQueryHandler(button_callback))
+    
     job_queue = app.job_queue
-    job_queue.run_daily(send_daily_fact, time=time(hour=8, minute=0))
+    # Утренний факт в 8:00 по твоему времени (5:00 UTC)
+    job_queue.run_daily(send_daily_fact, time=time(hour=5, minute=0))
+    
+    # Вечернее сообщение в 20:00 по твоему времени (17:00 UTC)
+    job_queue.run_daily(send_evening_message, time=time(hour=17, minute=0))
+    
     print("Бот запущен")
     app.run_polling()
 
