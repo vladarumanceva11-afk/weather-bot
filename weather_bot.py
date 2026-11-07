@@ -3,6 +3,9 @@ import random
 import json
 import os
 from datetime import datetime, time
+from http.server import BaseHTTPRequestHandler, HTTPServer
+import threading
+
 from telegram import Update, KeyboardButton, ReplyKeyboardMarkup, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes, CallbackQueryHandler
 
@@ -13,6 +16,21 @@ WEATHER_API_KEY = "faedfd8d0fe879aab4f6d34c818ccb55"
 CHANNEL_USERNAME = "@murchashaya_pogoda"
 # ------------------
 
+# --- ФЕЙКОВЫЙ СЕРВЕР ДЛЯ RENDER ---
+class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.end_headers()
+        self.wfile.write(b"Bot is alive!")
+
+def run_server():
+    port = int(os.environ.get("PORT", 10000))
+    server = HTTPServer(('0.0.0.0', port), SimpleHTTPRequestHandler)
+    server.serve_forever()
+
+threading.Thread(target=run_server, daemon=True).start()
+# ----------------------------------
+
 CAT_IMAGES_BY_LEVEL = {
     0: "https://images.unsplash.com/photo-1519052537078-e6302a4968d4?w=600",
     1: "https://images.unsplash.com/photo-1533738363-b7f9aef128ce?w=600",
@@ -20,7 +38,6 @@ CAT_IMAGES_BY_LEVEL = {
     3: "https://images.unsplash.com/photo-1518791841217-8f162f1e1131?w=600"
 }
 
-# Факты для утренней рассылки
 FACTS = [
     "Знаете ли вы, что самая низкая температура на Земле была зафиксирована в Антарктиде: -89.2°C? 🥶",
     "Коты могут спать до 16 часов в сутки. Погода к этому очень располагает! 😴",
@@ -127,7 +144,6 @@ def get_advice(temp):
     elif temp <= 25: return "👕 Тепло, можно в футболке."
     else: return "🩳 Жарко, пейте больше воды!"
 
-# Функция для автоматической отправки факта в канал
 async def send_daily_fact(context: ContextTypes.DEFAULT_TYPE):
     fact = random.choice(FACTS)
     text = f"🌅 <b>Доброе утро!</b>\n\n<b>Факт дня:</b>\n<i>{fact}</i>\n\nХорошего вам дня! 🐱"
@@ -312,10 +328,6 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("Мяу! Чтобы пользоваться ботом, подпишись на наш канал! 👇", reply_markup=reply_markup)
         return
         
-    if context.user_data.get('last_action') == text:
-        return
-    context.user_data['last_action'] = text
-    
     if "покормить" in text.lower():
         await feed_cat(update)
         return
@@ -390,7 +402,6 @@ def main():
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_text))
     app.add_handler(CallbackQueryHandler(button_callback))
     
-    # Настраиваем ежедневную отправку в 8:00 утра
     job_queue = app.job_queue
     job_queue.run_daily(send_daily_fact, time=time(hour=8, minute=0))
     
