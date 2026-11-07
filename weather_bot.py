@@ -11,10 +11,7 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters, C
 
 TELEGRAM_TOKEN = "9246784802:AAHxP96JoEXmjE_nmsWU12Pgm_TmV-LWghM"
 WEATHER_API_KEY = "faedfd8d0fe879aab4f6d34c818ccb55"
-
-# --- ТВОЙ КАНАЛ ---
 CHANNEL_USERNAME = "@murchashaya_pogoda"
-# ------------------
 
 # --- ФЕЙКОВЫЙ СЕРВЕР ДЛЯ RENDER ---
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
@@ -109,7 +106,6 @@ async def check_subscription(user_id, context: ContextTypes.DEFAULT_TYPE):
             return True
         return False
     except Exception as e:
-        print(f"Ошибка проверки подписки: {e}")
         return True
 
 async def add_experience(user_id, username, amount=1):
@@ -117,10 +113,8 @@ async def add_experience(user_id, username, amount=1):
     user_id = str(user_id)
     if user_id not in db:
         db[user_id] = {"level": 0, "exp": 0, "last_fed": 0, "total_fed": 0, "name": username, "last_bonus": 0}
-    
     db[user_id]["name"] = username
     db[user_id]["exp"] += amount
-    
     current_level = db[user_id]["level"]
     if current_level < 3 and db[user_id]["exp"] >= LEVEL_UP_EXP[current_level]:
         db[user_id]["level"] += 1
@@ -148,41 +142,27 @@ async def send_daily_fact(context: ContextTypes.DEFAULT_TYPE):
     fact = random.choice(FACTS)
     text = f"🌅 <b>Доброе утро!</b>\n\n<b>Факт дня:</b>\n<i>{fact}</i>\n\nХорошего вам дня! 🐱"
     try:
-        await context.bot.send_photo(
-            chat_id=CHANNEL_USERNAME, 
-            photo="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=600", 
-            caption=text, 
-            parse_mode="HTML"
-        )
-        print("Факт дня отправлен в канал!")
+        await context.bot.send_photo(chat_id=CHANNEL_USERNAME, photo="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=600", caption=text, parse_mode="HTML")
     except Exception as e:
-        print(f"Не удалось отправить факт в канал: {e}")
+        print(f"Ошибка: {e}")
 
 async def daily_bonus(update: Update):
     user_id = str(update.effective_user.id)
     username = get_display_name(update.effective_user)
     db = load_data()
-    
     if user_id not in db:
         db[user_id] = {"level": 0, "exp": 0, "last_fed": 0, "total_fed": 0, "name": username, "last_bonus": 0}
-    
     last_bonus = db[user_id].get("last_bonus", 0)
     now = datetime.now().timestamp()
-    
     if now - last_bonus < 86400:
         time_left = 86400 - (now - last_bonus)
-        hours = int(time_left // 3600)
-        minutes = int((time_left % 3600) // 60)
-        await update.message.reply_text(f"Мяу! Ты уже получала бонус сегодня. Приходи через {hours} ч. {minutes} мин. 🕰")
+        await update.message.reply_text(f"Мяу! Ты уже получала бонус сегодня. Приходи через {int(time_left // 3600)} ч. {int((time_left % 3600) // 60)} мин. 🕰")
         return
-        
     db[user_id]["last_bonus"] = now
     save_data(db)
     await add_experience(user_id, username, 2)
-    
     bonus_text = random.choice(DAILY_BONUSES)
-    caption = f"🎁 <b>Ежедневный бонус получен!</b>\n\n{bonus_text}\n\n✨ Ты получаешь <b>+2 опыта</b> для своего котика!\nВозвращайся завтра за новым подарком!"
-    
+    caption = f"🎁 <b>Ежедневный бонус получен!</b>\n\n{bonus_text}\n\n✨ Ты получаешь <b>+2 опыта</b> для своего котика!"
     try:
         await update.message.reply_photo(photo="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=600", caption=caption, parse_mode="HTML")
     except Exception:
@@ -193,32 +173,20 @@ async def show_leaderboard(update: Update):
     if not db:
         await update.message.reply_text("Пока никто не играл. Будь первым! 🐱")
         return
-        
     sorted_users = sorted(db.items(), key=lambda x: (x[1].get('level', 0), x[1].get('exp', 0), x[1].get('total_fed', 0)), reverse=True)
-    
-    text = "🏆 <b>Топ игроков (Короли дивана):</b>\n\n"
+    text = "🏆 <b>Топ игроков:</b>\n\n"
     for i, (uid, data) in enumerate(sorted_users[:5], 1):
-        name = data.get('name', 'Безымянный')
-        level = data.get('level', 0)
-        fed = data.get('total_fed', 0)
-        text += f"{i}. <b>{name}</b> — {get_level_name(level)}, 🐟 {fed}\n"
-        
+        text += f"{i}. <b>{data.get('name')}</b> — {get_level_name(data.get('level', 0))}, 🐟 {data.get('total_fed', 0)}\n"
     await update.message.reply_text(text, parse_mode="HTML")
 
 async def feed_cat(update: Update):
     user_id = str(update.effective_user.id)
-    username = get_display_name(update.effective_user)
     db = load_data()
     if user_id not in db:
-        db[user_id] = {"level": 0, "exp": 0, "last_fed": 0, "total_fed": 0, "name": username, "last_bonus": 0}
-        
-    last_fed = db[user_id].get("last_fed", 0)
-    time_passed = datetime.now().timestamp() - last_fed
-
-    if time_passed < 300:
+        db[user_id] = {"level": 0, "exp": 0, "last_fed": 0, "total_fed": 0, "name": get_display_name(update.effective_user), "last_bonus": 0}
+    if datetime.now().timestamp() - db[user_id].get("last_fed", 0) < 300:
         await update.message.reply_text("Мяу! Я уже сыт, но спасибо! 😸 Не перекорми меня!")
         return
-        
     db[user_id]["last_fed"] = datetime.now().timestamp()
     db[user_id]["total_fed"] = db[user_id].get("total_fed", 0) + 1
     save_data(db)
@@ -230,35 +198,20 @@ async def feed_cat(update: Update):
 
 async def show_stats(update: Update):
     user_id = str(update.effective_user.id)
-    username = get_display_name(update.effective_user)
     db = load_data()
     if user_id not in db:
-        db[user_id] = {"level": 0, "exp": 0, "last_fed": 0, "total_fed": 0, "name": username, "last_bonus": 0}
+        db[user_id] = {"level": 0, "exp": 0, "last_fed": 0, "total_fed": 0, "name": get_display_name(update.effective_user), "last_bonus": 0}
         save_data(db)
-        
     data = db[user_id]
     level = data["level"]
-    exp = data["exp"]
-    total_fed = data.get("total_fed", 0)
     next_exp = LEVEL_UP_EXP.get(level, "MAX")
-    
-    text = (
-        f"📊 <b>Твоя статистика:</b>\n\n"
-        f"👤 Имя: <b>{data.get('name')}</b>\n"
-        f"🐱 Уровень: {get_level_name(level)}\n"
-        f"✨ Опыт: {exp}/{next_exp}\n"
-        f"🐟 Всего съедено вкусняшек: {total_fed}\n\n"
-    )
-    if level < 3:
-        text += f"До следующего уровня осталось получить {next_exp - exp} опыта!"
-
+    text = f"📊 <b>Твоя статистика:</b>\n\n👤 Имя: <b>{data.get('name')}</b>\n🐱 Уровень: {get_level_name(level)}\n✨ Опыт: {data['exp']}/{next_exp}\n🐟 Съедено вкусняшек: {data.get('total_fed', 0)}"
     await update.message.reply_text(text, parse_mode="HTML")
 
 async def get_weather(update: Update, city=None):
     params = {"appid": WEATHER_API_KEY, "q": city, "units": "metric", "lang": "ru"}
     async with httpx.AsyncClient() as client:
         r = await client.get("https://api.openweathermap.org/data/2.5/weather", params=params)
-    
     if r.status_code == 200:
         data = r.json()
         temp = round(data['main']['temp'])
@@ -268,46 +221,32 @@ async def get_weather(update: Update, city=None):
         username = get_display_name(update.effective_user)
         level, exp, leveled_up = await add_experience(update.effective_user.id, username)
         cat_image = CAT_IMAGES_BY_LEVEL.get(level, CAT_IMAGES_BY_LEVEL[0])
-        weather_tip = WEATHER_TIPS.get(main_weather, WEATHER_TIPS["Default"])
         
         user_id = str(update.effective_user.id)
         db = load_data()
-        last_fed = db[user_id].get("last_fed", 0)
-        time_passed = datetime.now().timestamp() - last_fed
+        time_passed = datetime.now().timestamp() - db[user_id].get("last_fed", 0)
         
-        hunger_status = ""
-        if time_passed > 7200:
-            hunger_status = "\n\n😿 <b>Мяу... Я очень голодный! Нажми 'Покормить котика'!</b>"
-            cat_phrase = "Мяу-у-у... Дай мне рыбку, пожалуйста..."
-        else:
-            cat_phrase = get_cat_phrase(main_weather, level)
-
-        level_up_text = ""
-        if leveled_up:
-            level_up_text = f"\n\n🎉 <b>Поздравляю! Твой котик вырос до уровня {get_level_name(level)}!</b>"
-
-        next_level_exp = LEVEL_UP_EXP.get(level, "Максимум")
-        exp_text = f"✨ Опыт: {exp}/{next_level_exp}" if level < 3 else "✨ Опыт: MAX"
+        hunger_status = "\n\n😿 <b>Мяу... Я очень голодный!</b>" if time_passed > 7200 else ""
+        cat_phrase = "Мяу-у-у... Дай мне рыбку..." if time_passed > 7200 else get_cat_phrase(main_weather, level)
+        level_up_text = f"\n\n🎉 <b>Поздравляю! Твой котик вырос до уровня {get_level_name(level)}!</b>" if leveled_up else ""
+        exp_text = f"✨ Опыт: {exp}/{LEVEL_UP_EXP.get(level, 'MAX')}" if level < 3 else "✨ Опыт: MAX"
 
         caption = (
             f"🌍 Погода в <b>{data['name']}</b>: {temp}°C, {desc}\n"
             f"{get_advice(temp)}\n"
-            f"{weather_tip}\n\n"
+            f"{WEATHER_TIPS.get(main_weather, WEATHER_TIPS['Default'])}\n\n"
             f"🐱 <b>Твой питомец (Ур. {level} - {get_level_name(level)}):</b>\n"
-            f"<i>{cat_phrase}</i>{hunger_status}{level_up_text}\n\n"
-            f"{exp_text}"
+            f"<i>{cat_phrase}</i>{hunger_status}{level_up_text}\n\n{exp_text}"
         )
-        
         try:
             await update.message.reply_photo(photo=cat_image, caption=caption, parse_mode="HTML")
         except Exception:
             await update.message.reply_text(caption, parse_mode="HTML")
     else:
-        await update.message.reply_text("❌ Город не найден. Проверь название.")
+        await update.message.reply_text("❌ Город не найден.")
 
 async def prediction(update: Update):
-    username = get_display_name(update.effective_user)
-    await add_experience(update.effective_user.id, username)
+    await add_experience(update.effective_user.id, get_display_name(update.effective_user))
     pred = random.choice(PREDICTIONS)
     caption = f"🐱 <b>Кот-предсказатель:</b>\n\n<i>{pred}</i>"
     try:
@@ -317,82 +256,68 @@ async def prediction(update: Update):
 
 async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = update.message.text
-    
-    is_subscribed = await check_subscription(update.effective_user.id, context)
-    if not is_subscribed:
+    if not await check_subscription(update.effective_user.id, context):
+        keyboard = [[InlineKeyboardButton("📢 Подписаться", url=f"https://t.me/{CHANNEL_USERNAME.replace('@', '')}")], [InlineKeyboardButton("✅ Я подписался", callback_data="check_sub")]]
+        await update.message.reply_text("Мяу! Подпишись на наш канал! 👇", reply_markup=InlineKeyboardMarkup(keyboard))
+        return
+        
+    # Обработка кнопок
+    if "покормить" in text.lower(): await feed_cat(update)
+    elif "предсказание" in text.lower(): await prediction(update)
+    elif "статистика" in text.lower(): await show_stats(update)
+    elif "топ" in text.lower(): await show_leaderboard(update)
+    elif "бонус" in text.lower(): await daily_bonus(update)
+    elif "погода" in text.lower(): 
+        await update.message.reply_text("🌍 Напиши название города, и я пришлю погоду и котика!")
+    elif "ещё" in text.lower() or "меню" in text.lower():
+        # Меню "Ещё"
         keyboard = [
-            [InlineKeyboardButton("📢 Подписаться на канал", url=f"https://t.me/{CHANNEL_USERNAME.replace('@', '')}")],
-            [InlineKeyboardButton("✅ Я подписался", callback_data="check_sub")]
+            [KeyboardButton("🔮 Предсказание"), KeyboardButton("📊 Статистика")],
+            [KeyboardButton("🏆 Топ игроков"), KeyboardButton("⬅️ Назад")]
         ]
-        reply_markup = InlineKeyboardMarkup(keyboard)
-        await update.message.reply_text("Мяу! Чтобы пользоваться ботом, подпишись на наш канал! 👇", reply_markup=reply_markup)
-        return
-        
-    if "покормить" in text.lower():
-        await feed_cat(update)
-        return
-        
-    if "предсказание" in text.lower():
-        await prediction(update)
-        return
-        
-    if "статистика" in text.lower():
-        await show_stats(update)
-        return
-
-    if "топ" in text.lower():
-        await show_leaderboard(update)
-        return
-
-    if "бонус" in text.lower():
-        await daily_bonus(update)
-        return
-        
-    if text.startswith("🐱") or "Мяу" in text:
-        await update.message.reply_text("Муррр! Спасибо тебе! 😽 Ты лучший хозяин на свете!")
-        return
-        
-    context.user_data['last_city'] = text
-    await get_weather(update, city=text)
+        await update.message.reply_text("🎮 Дополнительное меню:", reply_markup=ReplyKeyboardMarkup(keyboard, resize_keyboard=True))
+    elif "назад" in text.lower():
+        # Возврат в главное меню
+        keyboard = [
+            [KeyboardButton("🌍 Погода"), KeyboardButton("🐟 Покормить котика")],
+            [KeyboardButton("🎁 Ежедневный бонус"), KeyboardButton("🎮 Ещё")]
+        ]
+        await update.message.reply_text("Главное меню:", reply_markup=ReplyKeyboardMarkup(keyboard, resize_keyboard=True))
+    elif text.startswith("🐱") or "Мяу" in text: await update.message.reply_text("Муррр! Спасибо тебе! 😽")
+    else:
+        context.user_data['last_city'] = text
+        await get_weather(update, city=text)
 
 async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
-    
     if query.data == "check_sub":
-        is_subscribed = await check_subscription(update.effective_user.id, context)
-        if is_subscribed:
+        if await check_subscription(update.effective_user.id, context):
             await query.edit_message_text("✅ Спасибо за подписку! Теперь напиши город, и я покажу погоду 🐱")
         else:
-            await query.edit_message_text("❌ Ты ещё не подписался. Подпишись на канал и попробуй снова.")
+            await query.edit_message_text("❌ Ты ещё не подписался.")
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = str(update.effective_user.id)
-    username = get_display_name(update.effective_user)
     db = load_data()
     if user_id not in db:
-        db[user_id] = {"level": 0, "exp": 0, "last_fed": 0, "total_fed": 0, "name": username, "last_bonus": 0}
+        db[user_id] = {"level": 0, "exp": 0, "last_fed": 0, "total_fed": 0, "name": get_display_name(update.effective_user), "last_bonus": 0}
         save_data(db)
 
-    is_subscribed = await check_subscription(update.effective_user.id, context)
-    if not is_subscribed:
-        keyboard = [
-            [InlineKeyboardButton("📢 Подписаться на канал", url=f"https://t.me/{CHANNEL_USERNAME.replace('@', '')}")],
-            [InlineKeyboardButton("✅ Я подписался", callback_data="check_sub")]
-        ]
-        reply_markup = InlineKeyboardMarkup(keyboard)
-        await update.message.reply_text("Привет! Чтобы пользоваться ботом, подпишись на наш канал! 👇", reply_markup=reply_markup)
+    if not await check_subscription(update.effective_user.id, context):
+        keyboard = [[InlineKeyboardButton("📢 Подписаться", url=f"https://t.me/{CHANNEL_USERNAME.replace('@', '')}")], [InlineKeyboardButton("✅ Я подписался", callback_data="check_sub")]]
+        await update.message.reply_text("Привет! Чтобы пользоваться ботом, подпишись на наш канал! 👇", reply_markup=InlineKeyboardMarkup(keyboard))
         return
 
+    # ГЛАВНОЕ МЕНЮ (4 кнопки)
     keyboard = [
-        [KeyboardButton("🐟 Покормить котика"), KeyboardButton("🔮 Предсказание")],
-        [KeyboardButton("🎁 Ежедневный бонус"), KeyboardButton("📊 Моя статистика")],
-        [KeyboardButton("🏆 Топ игроков")]
+        [KeyboardButton("🌍 Погода"), KeyboardButton("🐟 Покормить котика")],
+        [KeyboardButton("🎁 Ежедневный бонус"), KeyboardButton("🎮 Ещё")]
     ]
     reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
     await update.message.reply_text(
-        "Привет! 👋\nНапиши название города, и я пришлю погоду и покажу твоего питомца 🐱\n\n"
-        "Заходи каждый день и забирай «🎁 Ежедневный бонус»!",
+        "Привет! 👋 Добро пожаловать в «Мурчащую погоду»! 🌤🐱\n\n"
+        "Жми на кнопку «🌍 Погода», чтобы узнать прогноз, или выбери другую кнопку ниже!",
         reply_markup=reply_markup
     )
 
@@ -401,10 +326,8 @@ def main():
     app.add_handler(CommandHandler("start", start))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_text))
     app.add_handler(CallbackQueryHandler(button_callback))
-    
     job_queue = app.job_queue
     job_queue.run_daily(send_daily_fact, time=time(hour=8, minute=0))
-    
     print("Бот запущен")
     app.run_polling()
 
