@@ -32,15 +32,13 @@ SKINS = {
     "default": {"name": "Дворовый", "price": 0, "image": "https://images.unsplash.com/photo-1519052537078-e6302a4968d4?w=600"},
     "gentleman": {"name": "Джентльмен", "price": 500, "image": "https://images.unsplash.com/photo-1533738363-b7f9aef128ce?w=600"},
     "astronaut": {"name": "Космонавт", "price": 1500, "image": "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=600"},
-    "mafia": {"name": "Мафиози", "price": 5000, "image": "https://images.unsplash.com/photo-1518791841217-8f162f1e1131?w=600"},
-    "emperor": {"name": "Император 👑", "price": 10000, "image": "https://images.unsplash.com/photo-1573865526739-10659fec78a5?w=600"},
-    "secret": {"name": "??? (В разработке)", "price": 99999, "image": "https://images.unsplash.com/photo-1519052537078-e6302a4968d4?w=600"} 
+    "mafia": {"name": "Мафиози", "price": 5000, "image": "https://images.unsplash.com/photo-1518791841217-8f162f1e1131?w=600"}
 }
 
 FACTS = [
-    "Знаете ли вы, что скорость звука в воздухе составляет около 343 м/с?",
-    "Атмосферное давление на уровне моря составляет 760 мм рт. ст. Если оно падает — жди перемены погоды.",
-    "Самая высокая температура на Земле: +56.7°C (Долина Смерти, США).",
+    "Скорость звука в воздухе около 343 м/с.",
+    "Атмосферное давление на уровне моря 760 мм рт. ст.",
+    "Самая высокая температура на Земле: +56.7°C.",
     "Кучевые облака могут весить более 500 тонн.",
     "Радуга образуется из-за преломления света в каплях воды.",
     "В Антарктиде находится 90% всего льда на планете.",
@@ -49,44 +47,44 @@ FACTS = [
 ]
 
 EVENING_PHRASES = [
-    "Вечер — это время, когда можно наконец выдохнуть и заняться собой.",
-    "Пусть этот вечер пройдет в тишине и спокойствии. Вы это заслужили.",
-    "Иногда лучший способ перезагрузиться — это просто выспаться.",
+    "Вечер — время выдохнуть и заняться собой.",
+    "Пусть этот вечер пройдет в тишине и спокойствии.",
+    "Иногда лучший способ перезагрузиться — это выспаться.",
     "Спокойствие — это роскошь, которую мы можем себе позволить.",
     "За окном темнеет. Отличный повод закончить работу.",
     "Не забывайте: даже самая длинная рабочая неделя заканчивается."
 ]
 
 CAT_PHRASES = {
-    "Clear": ["Солнце светит, птички поют. Я, пожалуй, вздремну на подоконнике. ☀️🐈", "Отличная погода, чтобы выбраться из берлоги и выпить кофе на веранде. 🦋🐾"],
-    "Clouds": ["Пасмурно. Идеальное время для умных мыслей и сна. 😴☁️", "Серое небо, но мой вязаный плед все еще в деле. 🐱💤"],
-    "Rain": ["Дождь стучит по крыше. С удовольствием составлю компанию за чашкой чая. 🌧🐾", "Мяу. Отличная погода для просмотра сериала. 🍵🐱"],
-    "Snow": ["Холодно. Убедительная просьба: шапку мне и тебе. ❄️🧣🐈", "Снег на улице. Я в домике. Разбудите меня весной. ⛄️🐱"],
-    "Default": ["Я не сплю, я медитирую и набираюсь опыта. 🐾", "Погода сегодня философская. Как и я. Погладь. 🐱✨"]
+    "Clear": ["Солнце светит, я вздремну на подоконнике. ☀️🐈", "Отличная погода для прогулки. 🦋🐾"],
+    "Clouds": ["Пасмурно. Идеальное время для умных мыслей и сна. 😴☁️", "Серое небо, но мой плед все еще в деле. 🐱💤"],
+    "Rain": ["Дождь стучит по крыше. Составлю компанию за чашкой чая. 🌧🐾", "Мяу. Отличная погода для сериала. 🍵🐱"],
+    "Snow": ["Холодно. Шапку мне и тебе. ❄️🧣🐈", "Снег на улице. Я в домике. ⛄️🐱"],
+    "Default": ["Я не сплю, я медитирую и набираюсь опыта. 🐾", "Погода сегодня философская. Как и я. 🐱✨"]
 }
 
 PREDICTIONS = [
-    "🔮 Сегодня звёзды говорят: тебе повезёт! Улыбнись!",
-    "🔮 Мой хвост говорит, что сегодня отличный день для новых знакомств!",
-    "🔮 Мурр... Судя по моим усам, сегодня тебя ждет что-то приятное!",
-    "🔮 Предсказание дня: не забудь погладить кота! Это принесёт удачу!",
-    "🔮 Сегодня твой день! Верь в себя, и всё получится!"
+    "🔮 Сегодня звёзды говорят: тебе повезёт!",
+    "🔮 Мой хвост говорит, что сегодня отличный день!",
+    "🔮 Судя по моим усам, тебя ждет что-то приятное!",
+    "🔮 Не забудь погладить кота! Это принесёт удачу!",
+    "🔮 Сегодня твой день! Верь в себя!"
 ]
 
 WEATHER_TIPS = {
     "Clear": "Совет дня: не забудь надеть головной убор! 🧢",
     "Clouds": "Совет дня: отличная погода для прогулки! 🍂",
-    "Rain": "Совет дня: возьми зонт и надень непромокаемую обувь! ☔️",
-    "Snow": "Совет дня: одевайся слоями, чтобы было тепло! 🧣",
-    "Default": "Совет дня: пей больше воды и улыбайся! 😊"
+    "Rain": "Совет дня: возьми зонт! ☔️",
+    "Snow": "Совет дня: одевайся слоями! 🧣",
+    "Default": "Совет дня: пей больше воды! 😊"
 }
 
 DAILY_BONUSES = [
     "Держи виртуальную рыбку! 🐟",
-    "Вот тебе клубок пряжи для игр! 🧶",
-    "Поздравляю, ты получаешь статус 'Лучший хозяин дня'! 🏆",
-    "Мой хвост виляет от счастья, что ты зашла! 🐾",
-    "Дарю тебе мурчание на весь день! 😽"
+    "Вот тебе клубок пряжи! 🧶",
+    "Ты получаешь статус 'Лучший хозяин дня'! 🏆",
+    "Мой хвост виляет от счастья! 🐾",
+    "Дарю тебе мурчание! 😽"
 ]
 
 LEVEL_UP_EXP = {0: 50, 1: 150, 2: 400, 3: 9999}
@@ -139,13 +137,13 @@ def get_level_name(level):
 
 def get_cat_phrase(main_weather, level):
     if level == 3:
-        return "Мяу. Я король. Принеси мне рыбу, простолюдин. 👑🐾"
+        return "Мяу. Я король. Принеси мне рыбу. 👑🐾"
     return random.choice(CAT_PHRASES.get(main_weather, CAT_PHRASES["Default"]))
 
 def get_advice(temp):
-    if temp <= 0: return "🧥 Очень холодно, наденьте пуховик и шапку!"
+    if temp <= 0: return "🧥 Очень холодно, наденьте пуховик!"
     elif temp <= 10: return "🧥 Прохладно, лучше надеть куртку."
-    elif temp <= 18: return "🧥 Свежо, возьмите кофту или ветровку."
+    elif temp <= 18: return "🧥 Свежо, возьмите кофту."
     elif temp <= 25: return "👕 Тепло, можно в футболке."
     else: return "🩳 Жарко, пейте больше воды!"
 
@@ -179,16 +177,12 @@ async def show_wardrobe(update: Update):
     for skin_id, skin_data in SKINS.items():
         if skin_id == current_skin:
             keyboard.append([InlineKeyboardButton(f"✅ {skin_data['name']} (Надето)", callback_data="noop")])
-        elif skin_id == "secret":
-            keyboard.append([InlineKeyboardButton(f"🔒 {skin_data['name']}", callback_data="secret_info")])
         else:
             keyboard.append([InlineKeyboardButton(f"{skin_data['name']} - {skin_data['price']} 🐟", callback_data=f"buy_{skin_id}")])
             
     reply_markup = InlineKeyboardMarkup(keyboard)
     await update.message.reply_text(
-        f"🎨 <b>Гардероб котика</b>\n\n"
-        f"У тебя на счету: <b>{user_coins} 🐟</b>\n"
-        f"Выбери, что надеть:",
+        f"🎨 <b>Гардероб котика</b>\n\nУ тебя на счету: <b>{user_coins} 🐟</b>\nВыбери, что надеть:",
         reply_markup=reply_markup,
         parse_mode="HTML"
     )
@@ -212,12 +206,9 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
             db[user_id]["coins"] -= skin_price
             db[user_id]["skin"] = skin_id
             save_data(db)
-            await query.edit_message_text(f"✅ Отлично! Ты купил шубку «{SKINS[skin_id]['name']}». Теперь твой котик выглядит стильно! (Остаток: {db[user_id]['coins']} 🐟)")
+            await query.edit_message_text(f"✅ Ты купил шубку «{SKINS[skin_id]['name']}»! (Остаток: {db[user_id]['coins']} 🐟)")
         else:
-            await query.edit_message_text(f"❌ Недостаточно рыбок! Нужно {skin_price} 🐟, а у тебя только {user_coins} 🐟.")
-    
-    elif query.data == "secret_info":
-        await query.answer("🔒 Секретный костюм в разработке. Приглашай друзей, чтобы открыть его быстрее!", show_alert=True)
+            await query.edit_message_text(f"❌ Недостаточно рыбок! Нужно {skin_price} 🐟, у тебя {user_coins} 🐟.")
     
     elif query.data == "noop":
         await query.answer("Эта шубка уже надета!")
@@ -239,13 +230,13 @@ async def daily_bonus(update: Update):
     now = datetime.now().timestamp()
     if now - last_bonus < 86400:
         time_left = 86400 - (now - last_bonus)
-        await update.message.reply_text(f"Ты уже получал бонус сегодня. Приходи через {int(time_left // 3600)} ч. {int((time_left % 3600) // 60)} мин. 🕰")
+        await update.message.reply_text(f"Ты уже получал бонус. Жди {int(time_left // 3600)} ч. {int((time_left % 3600) // 60)} мин. 🕰")
         return
     db[user_id]["last_bonus"] = now
     save_data(db)
     await add_experience(user_id, username, 3)
     bonus_text = random.choice(DAILY_BONUSES)
-    caption = f"🎁 <b>Ежедневный бонус получен!</b>\n\n{bonus_text}\n\n✨ Ты получаешь <b>+3 опыта</b> и <b>+3 рыбки 🐟</b>!"
+    caption = f"🎁 <b>Ежедневный бонус!</b>\n\n{bonus_text}\n\n✨ +3 опыта и +3 рыбки 🐟"
     try:
         current_skin = db[user_id].get("skin", "default")
         await update.message.reply_photo(photo=SKINS[current_skin]["image"], caption=caption, parse_mode="HTML")
@@ -270,7 +261,7 @@ async def feed_cat(update: Update):
     if user_id not in db:
         db[user_id] = {"level": 0, "exp": 0, "last_fed": 0, "total_fed": 0, "name": username, "last_bonus": 0, "coins": 0, "skin": "default"}
     if datetime.now().timestamp() - db[user_id].get("last_fed", 0) < 300:
-        await update.message.reply_text("Я уже сыт. Не перекармливай, пожалуйста. 😸")
+        await update.message.reply_text("Я уже сыт. 😸")
         return
     db[user_id]["last_fed"] = datetime.now().timestamp()
     db[user_id]["total_fed"] = db[user_id].get("total_fed", 0) + 1
@@ -278,7 +269,7 @@ async def feed_cat(update: Update):
     
     await add_experience(user_id, username, 2)
     
-    caption = "😻 <b>Спасибо. Было вкусно.</b>\nПойду вздремну, разбудишь, если что. 💤\n\n✨ Ты получаешь <b>+2 опыта</b> и <b>+2 рыбки 🐟</b>."
+    caption = "😻 <b>Спасибо. Было вкусно.</b>\n💤\n\n✨ +2 опыта и +2 рыбки 🐟"
     try:
         current_skin = db[user_id].get("skin", "default")
         await update.message.reply_photo(photo=SKINS[current_skin]["image"], caption=caption, parse_mode="HTML")
@@ -294,7 +285,7 @@ async def show_stats(update: Update):
     data = db[user_id]
     level = data["level"]
     next_exp = LEVEL_UP_EXP.get(level, "MAX")
-    text = f"📊 <b>Твоя статистика:</b>\n\n👤 Имя: <b>{data.get('name')}</b>\n🐱 Уровень: {get_level_name(level)}\n✨ Опыт: {data['exp']}/{next_exp}\n🐟 Рыбок: {data.get('coins', 0)}\n🐾 Съедено вкусняшек: {data.get('total_fed', 0)}"
+    text = f"📊 <b>Статистика:</b>\n\n👤 Имя: <b>{data.get('name')}</b>\n🐱 Уровень: {get_level_name(level)}\n✨ Опыт: {data['exp']}/{next_exp}\n🐟 Рыбок: {data.get('coins', 0)}\n🐾 Кормлений: {data.get('total_fed', 0)}"
     await update.message.reply_text(text, parse_mode="HTML")
 
 async def get_weather(update: Update, city=None):
@@ -317,9 +308,9 @@ async def get_weather(update: Update, city=None):
         
         time_passed = datetime.now().timestamp() - db[user_id].get("last_fed", 0)
         
-        hunger_status = "\n\n😿 <b>Кстати, я голоден. Это намек.</b>" if time_passed > 7200 else ""
-        cat_phrase = "Я голоден. Покорми, и я продолжу медитировать..." if time_passed > 7200 else get_cat_phrase(main_weather, level)
-        level_up_text = f"\n\n🎉 <b>Мои поздравления. Я вырос до уровня {get_level_name(level)}.</b>" if leveled_up else ""
+        hunger_status = "\n\n😿 <b>Я голоден.</b>" if time_passed > 7200 else ""
+        cat_phrase = "Покорми меня..." if time_passed > 7200 else get_cat_phrase(main_weather, level)
+        level_up_text = f"\n\n🎉 <b>Новый уровень: {get_level_name(level)}!</b>" if leveled_up else ""
         exp_text = f"✨ Опыт: {exp}/{LEVEL_UP_EXP.get(level, 'MAX')}" if level < 3 else "✨ Опыт: MAX"
         coins_text = f"🐟 Рыбок: {db[user_id].get('coins', 0)}"
 
@@ -327,7 +318,7 @@ async def get_weather(update: Update, city=None):
             f"🌍 <b>{data['name']}</b>: {temp}°C, {desc}\n"
             f"{get_advice(temp)}\n"
             f"{WEATHER_TIPS.get(main_weather, WEATHER_TIPS['Default'])}\n\n"
-            f"🐱 <b>Мой статус (Ур. {level} - {get_level_name(level)}):</b>\n"
+            f"🐱 <b>(Ур. {level} - {get_level_name(level)}):</b>\n"
             f"<i>{cat_phrase}</i>{hunger_status}{level_up_text}\n\n{exp_text}\n{coins_text}"
         )
         try:
@@ -354,21 +345,21 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     if not await check_subscription(update.effective_user.id, context):
         keyboard = [[InlineKeyboardButton("📢 Подписаться", url=f"https://t.me/{CHANNEL_USERNAME.replace('@', '')}")], [InlineKeyboardButton("✅ Я подписался", callback_data="check_sub")]]
-        await update.message.reply_text("Для начала неплохо бы подписаться на наш канал. 👇", reply_markup=InlineKeyboardMarkup(keyboard))
+        await update.message.reply_text("Подпишись на канал. 👇", reply_markup=InlineKeyboardMarkup(keyboard))
         return
 
     greetings = ["привет", "здравствуй", "хай", "добрый день", "добрый вечер", "доброе утро", "приветик"]
     if any(word in text for word in greetings):
-        await update.message.reply_text(f"Приветствую, {get_display_name(update.effective_user)}. Чем займемся? Узнаем погоду или займемся прокачкой? 🐱")
+        await update.message.reply_text(f"Приветствую, {get_display_name(update.effective_user)}. Чем займемся? 🐱")
         return
     if "как дела" in text:
-        await update.message.reply_text("Всё в порядке. Наслаждаюсь покоем. А у тебя? 😸")
+        await update.message.reply_text("Всё в порядке. Наслаждаюсь покоем. 😸")
         return
     if "спасибо" in text or "благодарю" in text:
-        await update.message.reply_text("Не за что. Обращайся. 😽")
+        await update.message.reply_text("Не за что. 😽")
         return
     if "пока" in text or "до свидания" in text:
-        await update.message.reply_text("До встречи. Не забывай меня. 🐾")
+        await update.message.reply_text("До встречи. 🐾")
         return
 
     if "покормить" in text: await feed_cat(update)
@@ -378,14 +369,14 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif "бонус" in text: await daily_bonus(update)
     elif "гардероб" in text or "шубка" in text: await show_wardrobe(update)
     elif "погода" in text: 
-        await update.message.reply_text("Какой город тебя интересует?")
+        await update.message.reply_text("Какой город?")
     elif "ещё" in text or "меню" in text:
         keyboard = [
             [KeyboardButton("🔮 Предсказание"), KeyboardButton("📊 Статистика")],
             [KeyboardButton("🎨 Гардероб"), KeyboardButton("🏆 Топ игроков")],
             [KeyboardButton("⬅️ Назад")]
         ]
-        await update.message.reply_text("Дополнительные опции:", reply_markup=ReplyKeyboardMarkup(keyboard, resize_keyboard=True))
+        await update.message.reply_text("Опции:", reply_markup=ReplyKeyboardMarkup(keyboard, resize_keyboard=True))
     elif "назад" in text:
         keyboard = [
             [KeyboardButton("🌍 Погода"), KeyboardButton("🐟 Покормить котика")],
@@ -406,8 +397,32 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if not await check_subscription(update.effective_user.id, context):
         keyboard = [[InlineKeyboardButton("📢 Подписаться", url=f"https://t.me/{CHANNEL_USERNAME.replace('@', '')}")], [InlineKeyboardButton("✅ Я подписался", callback_data="check_sub")]]
-        await update.message.reply_text("Добро пожаловать. Для начала подпишись на наш канал. 👇", reply_markup=InlineKeyboardMarkup(keyboard))
+        await update.message.reply_text("Привет. Подпишись на канал. 👇", reply_markup=InlineKeyboardMarkup(keyboard))
         return
 
     keyboard = [
-        [KeyboardButt
+        [KeyboardButton("🌍 Погода"), KeyboardButton("🐟 Покормить котика")],
+        [KeyboardButton("🎁 Ежедневный бонус"), KeyboardButton("🎮 Ещё")]
+    ]
+    reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
+    await update.message.reply_text(
+        "Приветствую. 👋 Это бот «Мурчащая погода».\n\n"
+        "Здесь можно узнать прогноз, получить предсказание и заняться развитием питомца.",
+        reply_markup=reply_markup
+    )
+
+def main():
+    app = Application.builder().token(TELEGRAM_TOKEN).build()
+    app.add_handler(CommandHandler("start", start))
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_text))
+    app.add_handler(CallbackQueryHandler(button_callback))
+    
+    job_queue = app.job_queue
+    job_queue.run_daily(send_daily_fact, time=time(hour=5, minute=0))
+    job_queue.run_daily(send_evening_message, time=time(hour=17, minute=0))
+    
+    print("Бот запущен")
+    app.run_polling()
+
+if __name__ == "__main__":
+    main()
