@@ -6,8 +6,8 @@ from datetime import datetime, time
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import threading
 
-from telegram import Update, KeyboardButton, ReplyKeyboardMarkup, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes, CallbackQueryHandler
+from telegram import Update, KeyboardButton, ReplyKeyboardMarkup, InlineKeyboardButton, InlineKeyboardMarkup, LabeledPrice
+from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes, CallbackQueryHandler, PreCheckoutQueryHandler
 
 TELEGRAM_TOKEN = "9246784802:AAHxP96JoEXmjE_nmsWU12Pgm_TmV-LWghM"
 WEATHER_API_KEY = "faedfd8d0fe879aab4f6d34c818ccb55"
@@ -32,7 +32,8 @@ SKINS = {
     "default": {"name": "Дворовый", "price": 0, "image": "https://images.unsplash.com/photo-1519052537078-e6302a4968d4?w=600"},
     "gentleman": {"name": "Джентльмен", "price": 500, "image": "https://images.unsplash.com/photo-1533738363-b7f9aef128ce?w=600"},
     "astronaut": {"name": "Космонавт", "price": 1500, "image": "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=600"},
-    "mafia": {"name": "Мафиози", "price": 5000, "image": "https://images.unsplash.com/photo-1518791841217-8f162f1e1131?w=600"}
+    "mafia": {"name": "Мафиози", "price": 5000, "image": "https://images.unsplash.com/photo-1518791841217-8f162f1e1131?w=600"},
+    "emperor": {"name": "Император 👑", "price": 10000, "image": "https://images.unsplash.com/photo-1573865526739-10659fec78a5?w=600"}
 }
 
 FACTS = [
@@ -179,6 +180,9 @@ async def show_wardrobe(update: Update):
             keyboard.append([InlineKeyboardButton(f"✅ {skin_data['name']} (Надето)", callback_data="noop")])
         else:
             keyboard.append([InlineKeyboardButton(f"{skin_data['name']} - {skin_data['price']} 🐟", callback_data=f"buy_{skin_id}")])
+    
+    # Добавляем кнопку покупки рыбок
+    keyboard.append([InlineKeyboardButton("💎 Купить 500 рыбок за 50 Stars", callback_data="buy_stars")])
             
     reply_markup = InlineKeyboardMarkup(keyboard)
     await update.message.reply_text(
@@ -191,6 +195,24 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
     
+    if query.data == "buy_stars":
+        # Выставляем счет в Telegram Stars
+        title = "💎 500 рыбок"
+        description = "Пополни свой баланс рыбок для покупки шубок котику!"
+        payload = "buy_500_fish"
+        currency = "XTR" # Telegram Stars
+        prices = [LabeledPrice("Пакет рыбок", 50)] # 50 звезд
+        
+        await query.message.reply_invoice(
+            title=title,
+            description=description,
+            payload=payload,
+            provider_token="", # Для Stars оставляем пустым
+            currency=currency,
+            prices=prices
+        )
+        return
+
     if query.data.startswith("buy_"):
         skin_id = query.data.replace("buy_", "")
         user_id = str(update.effective_user.id)
@@ -219,6 +241,24 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await query.edit_message_text("✅ Спасибо за подписку! Теперь напиши город.")
         else:
             await query.edit_message_text("❌ Ты ещё не подписался.")
+
+# Обработка успешной оплаты
+async def precheckout_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.pre_checkout_query
+    if query.invoice_payload == "buy_500_fish":
+        await query.answer(ok=True)
+    else:
+        await query.answer(ok=False, error_message="Что-то пошло не так...")
+
+async def successful_payment(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = str(update.effective_user.id)
+    db = load_data()
+    
+    if user_id in db:
+        db[user_id]["coins"] = db[user_id].get("coins", 0) + 500
+        save_data(db)
+    
+    await update.message.reply_text("💎 <b>Успешная оплата!</b>\nТвой баланс пополнен на 500 рыбок 🐟. Скорее в гардероб за новой шубкой!", parse_mode="HTML")
 
 async def daily_bonus(update: Update):
     user_id = str(update.effective_user.id)
@@ -397,32 +437,4 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if not await check_subscription(update.effective_user.id, context):
         keyboard = [[InlineKeyboardButton("📢 Подписаться", url=f"https://t.me/{CHANNEL_USERNAME.replace('@', '')}")], [InlineKeyboardButton("✅ Я подписался", callback_data="check_sub")]]
-        await update.message.reply_text("Привет. Подпишись на канал. 👇", reply_markup=InlineKeyboardMarkup(keyboard))
-        return
-
-    keyboard = [
-        [KeyboardButton("🌍 Погода"), KeyboardButton("🐟 Покормить котика")],
-        [KeyboardButton("🎁 Ежедневный бонус"), KeyboardButton("🎮 Ещё")]
-    ]
-    reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
-    await update.message.reply_text(
-        "Приветствую. 👋 Это бот «Мурчащая погода».\n\n"
-        "Здесь можно узнать прогноз, получить предсказание и заняться развитием питомца.",
-        reply_markup=reply_markup
-    )
-
-def main():
-    app = Application.builder().token(TELEGRAM_TOKEN).build()
-    app.add_handler(CommandHandler("start", start))
-    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_text))
-    app.add_handler(CallbackQueryHandler(button_callback))
-    
-    job_queue = app.job_queue
-    job_queue.run_daily(send_daily_fact, time=time(hour=5, minute=0))
-    job_queue.run_daily(send_evening_message, time=time(hour=17, minute=0))
-    
-    print("Бот запущен")
-    app.run_polling()
-
-if __name__ == "__main__":
-    main()
+        await update.message.reply_text("Привет. Подпишись на канал. 👇", reply_markup=In
