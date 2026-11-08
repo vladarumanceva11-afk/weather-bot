@@ -181,7 +181,6 @@ async def show_wardrobe(update: Update):
         else:
             keyboard.append([InlineKeyboardButton(f"{skin_data['name']} - {skin_data['price']} 🐟", callback_data=f"buy_{skin_id}")])
     
-    # Добавляем кнопку покупки рыбок
     keyboard.append([InlineKeyboardButton("💎 Купить 500 рыбок за 50 Stars", callback_data="buy_stars")])
             
     reply_markup = InlineKeyboardMarkup(keyboard)
@@ -196,18 +195,18 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await query.answer()
     
     if query.data == "buy_stars":
-        # Выставляем счет в Telegram Stars
         title = "💎 500 рыбок"
         description = "Пополни свой баланс рыбок для покупки шубок котику!"
         payload = "buy_500_fish"
-        currency = "XTR" # Telegram Stars
-        prices = [LabeledPrice("Пакет рыбок", 50)] # 50 звезд
+        currency = "XTR"
+        prices = [LabeledPrice("Пакет рыбок", 50)]
         
-        await query.message.reply_invoice(
+        await context.bot.send_invoice(
+            chat_id=query.message.chat_id,
             title=title,
             description=description,
             payload=payload,
-            provider_token="", # Для Stars оставляем пустым
+            provider_token="",
             currency=currency,
             prices=prices
         )
@@ -242,7 +241,6 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         else:
             await query.edit_message_text("❌ Ты ещё не подписался.")
 
-# Обработка успешной оплаты
 async def precheckout_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.pre_checkout_query
     if query.invoice_payload == "buy_500_fish":
@@ -437,4 +435,8 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if not await check_subscription(update.effective_user.id, context):
         keyboard = [[InlineKeyboardButton("📢 Подписаться", url=f"https://t.me/{CHANNEL_USERNAME.replace('@', '')}")], [InlineKeyboardButton("✅ Я подписался", callback_data="check_sub")]]
-        await update.message.reply_text("Привет. Подпишись на канал. 👇", reply_markup=In
+        await update.message.reply_text("Привет. Подпишись на канал. 👇", reply_markup=InlineKeyboardMarkup(keyboard))
+        return
+
+    keyboard = [
+        [KeyboardButton("🌍 Погода"), KeyboardButton("🐟 Покор
