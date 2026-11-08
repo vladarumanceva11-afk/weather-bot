@@ -13,7 +13,6 @@ TELEGRAM_TOKEN = "9246784802:AAHxP96JoEXmjE_nmsWU12Pgm_TmV-LWghM"
 WEATHER_API_KEY = "faedfd8d0fe879aab4f6d34c818ccb55"
 CHANNEL_USERNAME = "@murchashaya_pogoda"
 
-# --- ФЕЙКОВЫЙ СЕРВЕР ДЛЯ RENDER ---
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         self.send_response(200)
@@ -26,7 +25,6 @@ def run_server():
     server.serve_forever()
 
 threading.Thread(target=run_server, daemon=True).start()
-# ----------------------------------
 
 SKINS = {
     "default": {"name": "Дворовый", "price": 0, "image": "https://images.unsplash.com/photo-1519052537078-e6302a4968d4?w=600"},
@@ -36,57 +34,12 @@ SKINS = {
     "emperor": {"name": "Император 👑", "price": 10000, "image": "https://images.unsplash.com/photo-1573865526739-10659fec78a5?w=600"}
 }
 
-FACTS = [
-    "Скорость звука в воздухе около 343 м/с.",
-    "Атмосферное давление на уровне моря 760 мм рт. ст.",
-    "Самая высокая температура на Земле: +56.7°C.",
-    "Кучевые облака могут весить более 500 тонн.",
-    "Радуга образуется из-за преломления света в каплях воды.",
-    "В Антарктиде находится 90% всего льда на планете.",
-    "Молния разогревает воздух до 30 000°C.",
-    "Самый сухой континент — Австралия."
-]
-
-EVENING_PHRASES = [
-    "Вечер — время выдохнуть и заняться собой.",
-    "Пусть этот вечер пройдет в тишине и спокойствии.",
-    "Иногда лучший способ перезагрузиться — это выспаться.",
-    "Спокойствие — это роскошь, которую мы можем себе позволить.",
-    "За окном темнеет. Отличный повод закончить работу.",
-    "Не забывайте: даже самая длинная рабочая неделя заканчивается."
-]
-
-CAT_PHRASES = {
-    "Clear": ["Солнце светит, я вздремну на подоконнике. ☀️🐈", "Отличная погода для прогулки. 🦋🐾"],
-    "Clouds": ["Пасмурно. Идеальное время для умных мыслей и сна. 😴☁️", "Серое небо, но мой плед все еще в деле. 🐱💤"],
-    "Rain": ["Дождь стучит по крыше. Составлю компанию за чашкой чая. 🌧🐾", "Мяу. Отличная погода для сериала. 🍵🐱"],
-    "Snow": ["Холодно. Шапку мне и тебе. ❄️🧣🐈", "Снег на улице. Я в домике. ⛄️🐱"],
-    "Default": ["Я не сплю, я медитирую и набираюсь опыта. 🐾", "Погода сегодня философская. Как и я. 🐱✨"]
-}
-
-PREDICTIONS = [
-    "🔮 Сегодня звёзды говорят: тебе повезёт!",
-    "🔮 Мой хвост говорит, что сегодня отличный день!",
-    "🔮 Судя по моим усам, тебя ждет что-то приятное!",
-    "🔮 Не забудь погладить кота! Это принесёт удачу!",
-    "🔮 Сегодня твой день! Верь в себя!"
-]
-
-WEATHER_TIPS = {
-    "Clear": "Совет дня: не забудь надеть головной убор! 🧢",
-    "Clouds": "Совет дня: отличная погода для прогулки! 🍂",
-    "Rain": "Совет дня: возьми зонт! ☔️",
-    "Snow": "Совет дня: одевайся слоями! 🧣",
-    "Default": "Совет дня: пей больше воды! 😊"
-}
-
-DAILY_BONUSES = [
-    "Держи виртуальную рыбку! 🐟",
-    "Вот тебе клубок пряжи! 🧶",
-    "Ты получаешь статус 'Лучший хозяин дня'! 🏆",
-    "Мой хвост виляет от счастья! 🐾",
-    "Дарю тебе мурчание! 😽"
-]
+FACTS = ["Скорость звука 343 м/с.", "Давление 760 мм рт. ст.", "Температура max +56.7°C.", "Облака весят 500 тонн.", "Радуга — это свет.", "В Антарктиде 90% льда.", "Молния 30 000°C.", "Сухой континент — Австралия."]
+EVENING_PHRASES = ["Вечер — время выдохнуть.", "Пусть вечер пройдет спокойно.", "Лучший способ перезагрузиться — выспаться.", "Спокойствие — это роскошь.", "Закончи работу.", "Даже рабочая неделя заканчивается."]
+CAT_PHRASES = {"Clear": ["Солнце светит. ☀️🐈", "Отличная погода. 🦋🐾"], "Clouds": ["Пасмурно. 😴☁️", "Серое небо. 🐱💤"], "Rain": ["Дождь. 🌧🐾", "Погода для сериала. 🍵🐱"], "Snow": ["Холодно. ❄️🧣🐈", "Снег. ⛄️🐱"], "Default": ["Я медитирую. 🐾", "Погода философская. 🐱✨"]}
+PREDICTIONS = ["🔮 Тебе повезёт!", "🔮 Отличный день!", "🔮 Тебя ждет приятное!", "🔮 Погладь кота!", "🔮 Верь в себя!"]
+WEATHER_TIPS = {"Clear": "Носи головной убор! 🧢", "Clouds": "Иди гулять! 🍂", "Rain": "Возьми зонт! ☔️", "Snow": "Одевайся слоями! 🧣", "Default": "Пей воду! 😊"}
+DAILY_BONUSES = ["Держи рыбку! 🐟", "Вот клубок! 🧶", "Статус 'Лучший хозяин'! 🏆", "Хвост виляет! 🐾", "Мурчание! 😽"]
 
 LEVEL_UP_EXP = {0: 50, 1: 150, 2: 400, 3: 9999}
 DB_FILE = "cat_data.json"
@@ -104,339 +57,335 @@ def save_data(data):
     with open(DB_FILE, "w") as f:
         json.dump(data, f)
 
-def get_display_name(user):
+def get_name(user):
     return user.first_name if user.first_name else "Хозяин"
 
-async def check_subscription(user_id, context: ContextTypes.DEFAULT_TYPE):
+async def check_sub(user_id, context: ContextTypes.DEFAULT_TYPE):
     try:
         member = await context.bot.get_chat_member(chat_id=CHANNEL_USERNAME, user_id=user_id)
-        if member.status in ['member', 'administrator', 'creator']:
-            return True
-        return False
-    except Exception as e:
+        return member.status in ['member', 'administrator', 'creator']
+    except:
         return True
 
-async def add_experience(user_id, username, amount=1):
+async def add_exp(user_id, username, amount=1):
     db = load_data()
-    user_id = str(user_id)
-    if user_id not in db:
-        db[user_id] = {"level": 0, "exp": 0, "last_fed": 0, "total_fed": 0, "name": username, "last_bonus": 0, "coins": 0, "skin": "default"}
+    uid = str(user_id)
+    if uid not in db:
+        db[uid] = {"level": 0, "exp": 0, "last_fed": 0, "total_fed": 0, "name": username, "last_bonus": 0, "coins": 0, "skin": "default"}
     
-    db[user_id]["coins"] = db[user_id].get("coins", 0) + amount 
-    db[user_id]["name"] = username
-    db[user_id]["exp"] += amount
-    current_level = db[user_id]["level"]
-    if current_level < 3 and db[user_id]["exp"] >= LEVEL_UP_EXP[current_level]:
-        db[user_id]["level"] += 1
-        db[user_id]["exp"] = 0
+    db[uid]["coins"] = db[uid].get("coins", 0) + amount 
+    db[uid]["name"] = username
+    db[uid]["exp"] += amount
+    lvl = db[uid]["level"]
+    if lvl < 3 and db[uid]["exp"] >= LEVEL_UP_EXP[lvl]:
+        db[uid]["level"] += 1
+        db[uid]["exp"] = 0
     save_data(db)
-    return db[user_id]["level"], db[user_id]["exp"], current_level != db[user_id]["level"]
+    return db[uid]["level"], db[uid]["exp"], lvl != db[uid]["level"]
 
-def get_level_name(level):
-    names = ["🐣 Котенок", "🐱 Подросток", "🐈 Взрослый Кот", "👑 Король дивана"]
-    return names[level]
+def level_name(lvl):
+    return ["🐣 Котенок", "🐱 Подросток", "🐈 Взрослый Кот", "👑 Король дивана"][lvl]
 
-def get_cat_phrase(main_weather, level):
-    if level == 3:
-        return "Мяу. Я король. Принеси мне рыбу. 👑🐾"
-    return random.choice(CAT_PHRASES.get(main_weather, CAT_PHRASES["Default"]))
+def cat_phrase(weather, lvl):
+    if lvl == 3: return "Я король. Принеси рыбу. 👑🐾"
+    return random.choice(CAT_PHRASES.get(weather, CAT_PHRASES["Default"]))
 
-def get_advice(temp):
-    if temp <= 0: return "🧥 Очень холодно, наденьте пуховик!"
-    elif temp <= 10: return "🧥 Прохладно, лучше надеть куртку."
-    elif temp <= 18: return "🧥 Свежо, возьмите кофту."
-    elif temp <= 25: return "👕 Тепло, можно в футболке."
-    else: return "🩳 Жарко, пейте больше воды!"
+def advice(temp):
+    if temp <= 0: return "Наденьте пуховик! 🧥"
+    if temp <= 10: return "Наденьте куртку. 🧥"
+    if temp <= 18: return "Возьмите кофту. 🧥"
+    if temp <= 25: return "Можно в футболке. 👕"
+    return "Пейте воду! 🩳"
 
-async def send_daily_fact(context: ContextTypes.DEFAULT_TYPE):
+async def send_fact(context: ContextTypes.DEFAULT_TYPE):
     fact = random.choice(FACTS)
     text = f"🌅 <b>Доброе утро.</b>\n\n<b>Факт дня:</b>\n<i>{fact}</i>\n\nХорошего дня."
     try:
         await context.bot.send_photo(chat_id=CHANNEL_USERNAME, photo="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=600", caption=text, parse_mode="HTML")
-    except Exception as e:
-        print(f"Ошибка: {e}")
+    except:
+        pass
 
-async def send_evening_message(context: ContextTypes.DEFAULT_TYPE):
+async def send_evening(context: ContextTypes.DEFAULT_TYPE):
     phrase = random.choice(EVENING_PHRASES)
     text = f"🌙 <b>Добрый вечер.</b>\n\n<i>{phrase}</i>\n\nСпокойной ночи."
     try:
         await context.bot.send_photo(chat_id=CHANNEL_USERNAME, photo="https://images.unsplash.com/photo-1519052537078-e6302a4968d4?w=600", caption=text, parse_mode="HTML")
-    except Exception as e:
-        print(f"Ошибка: {e}")
+    except:
+        pass
 
 async def show_wardrobe(update: Update):
-    user_id = str(update.effective_user.id)
+    uid = str(update.effective_user.id)
     db = load_data()
-    if user_id not in db:
-        db[user_id] = {"level": 0, "exp": 0, "last_fed": 0, "total_fed": 0, "name": get_display_name(update.effective_user), "last_bonus": 0, "coins": 0, "skin": "default"}
+    if uid not in db:
+        db[uid] = {"level": 0, "exp": 0, "last_fed": 0, "total_fed": 0, "name": get_name(update.effective_user), "last_bonus": 0, "coins": 0, "skin": "default"}
         save_data(db)
     
-    user_coins = db[user_id].get("coins", 0)
-    current_skin = db[user_id].get("skin", "default")
+    coins = db[uid].get("coins", 0)
+    curr_skin = db[uid].get("skin", "default")
+    kb = []
     
-    keyboard = []
-    for skin_id, skin_data in SKINS.items():
-        if skin_id == current_skin:
-            keyboard.append([InlineKeyboardButton(f"✅ {skin_data['name']} (Надето)", callback_data="noop")])
+    for sid, sdata in SKINS.items():
+        if sid == curr_skin:
+            kb.append([InlineKeyboardButton(f"✅ {sdata['name']} (Надето)", callback_data="noop")])
         else:
-            keyboard.append([InlineKeyboardButton(f"{skin_data['name']} - {skin_data['price']} 🐟", callback_data=f"buy_{skin_id}")])
-    
-    keyboard.append([InlineKeyboardButton("💎 Купить 500 рыбок за 50 Stars", callback_data="buy_stars")])
+            kb.append([InlineKeyboardButton(f"{sdata['name']} - {sdata['price']} 🐟", callback_data=f"buy_{sid}")])
             
-    reply_markup = InlineKeyboardMarkup(keyboard)
+    kb.append([InlineKeyboardButton("💎 Купить 500 рыбок за 50 Stars", callback_data="buy_stars")])
+    markup = InlineKeyboardMarkup(kb)
+    
     await update.message.reply_text(
-        f"🎨 <b>Гардероб котика</b>\n\nУ тебя на счету: <b>{user_coins} 🐟</b>\nВыбери, что надеть:",
-        reply_markup=reply_markup,
+        f"🎨 <b>Гардероб котика</b>\n\nУ тебя на счету: <b>{coins} 🐟</b>\nВыбери, что надеть:",
+        reply_markup=markup,
         parse_mode="HTML"
     )
 
 async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    query = update.callback_query
-    await query.answer()
+    q = update.callback_query
+    await q.answer()
     
-    if query.data == "buy_stars":
-        title = "💎 500 рыбок"
-        description = "Пополни свой баланс рыбок для покупки шубок котику!"
-        payload = "buy_500_fish"
-        currency = "XTR"
-        prices = [LabeledPrice("Пакет рыбок", 50)]
-        
+    if q.data == "buy_stars":
         await context.bot.send_invoice(
-            chat_id=query.message.chat_id,
-            title=title,
-            description=description,
-            payload=payload,
+            chat_id=q.message.chat_id,
+            title="💎 500 рыбок",
+            description="Пополни баланс для покупки шубок!",
+            payload="buy_500_fish",
             provider_token="",
-            currency=currency,
-            prices=prices
+            currency="XTR",
+            prices=[LabeledPrice("Пакет рыбок", 50)]
         )
         return
 
-    if query.data.startswith("buy_"):
-        skin_id = query.data.replace("buy_", "")
-        user_id = str(update.effective_user.id)
+    if q.data.startswith("buy_"):
+        sid = q.data.replace("buy_", "")
+        uid = str(update.effective_user.id)
         db = load_data()
+        if uid not in db: return
         
-        if user_id not in db:
-            return
-            
-        skin_price = SKINS[skin_id]["price"]
-        user_coins = db[user_id].get("coins", 0)
+        price = SKINS[sid]["price"]
+        coins = db[uid].get("coins", 0)
         
-        if user_coins >= skin_price:
-            db[user_id]["coins"] -= skin_price
-            db[user_id]["skin"] = skin_id
+        if coins >= price:
+            db[uid]["coins"] -= price
+            db[uid]["skin"] = sid
             save_data(db)
-            await query.edit_message_text(f"✅ Ты купил шубку «{SKINS[skin_id]['name']}»! (Остаток: {db[user_id]['coins']} 🐟)")
+            await q.edit_message_text(f"✅ Ты купил шубку «{SKINS[sid]['name']}»! (Остаток: {db[uid]['coins']} 🐟)")
         else:
-            await query.edit_message_text(f"❌ Недостаточно рыбок! Нужно {skin_price} 🐟, у тебя {user_coins} 🐟.")
+            await q.edit_message_text(f"❌ Недостаточно рыбок! Нужно {price} 🐟.")
+        return
     
-    elif query.data == "noop":
-        await query.answer("Эта шубка уже надета!")
+    if q.data == "noop":
+        await q.answer("Эта шубка уже надета!")
         return
 
-    if query.data == "check_sub":
-        if await check_subscription(update.effective_user.id, context):
-            await query.edit_message_text("✅ Спасибо за подписку! Теперь напиши город.")
+    if q.data == "check_sub":
+        if await check_sub(update.effective_user.id, context):
+            await q.edit_message_text("✅ Спасибо за подписку! Напиши город.")
         else:
-            await query.edit_message_text("❌ Ты ещё не подписался.")
+            await q.edit_message_text("❌ Ты ещё не подписался.")
 
 async def precheckout_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    query = update.pre_checkout_query
-    if query.invoice_payload == "buy_500_fish":
-        await query.answer(ok=True)
+    q = update.pre_checkout_query
+    if q.invoice_payload == "buy_500_fish":
+        await q.answer(ok=True)
     else:
-        await query.answer(ok=False, error_message="Что-то пошло не так...")
+        await q.answer(ok=False, error_message="Ошибка.")
 
-async def successful_payment(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user_id = str(update.effective_user.id)
+async def success_payment(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    uid = str(update.effective_user.id)
     db = load_data()
-    
-    if user_id in db:
-        db[user_id]["coins"] = db[user_id].get("coins", 0) + 500
+    if uid in db:
+        db[uid]["coins"] = db[uid].get("coins", 0) + 500
         save_data(db)
-    
-    await update.message.reply_text("💎 <b>Успешная оплата!</b>\nТвой баланс пополнен на 500 рыбок 🐟. Скорее в гардероб за новой шубкой!", parse_mode="HTML")
+    await update.message.reply_text("💎 <b>Оплата прошла!</b>\nБаланс пополнен на 500 рыбок 🐟.", parse_mode="HTML")
 
 async def daily_bonus(update: Update):
-    user_id = str(update.effective_user.id)
-    username = get_display_name(update.effective_user)
+    uid = str(update.effective_user.id)
+    name = get_name(update.effective_user)
     db = load_data()
-    if user_id not in db:
-        db[user_id] = {"level": 0, "exp": 0, "last_fed": 0, "total_fed": 0, "name": username, "last_bonus": 0, "coins": 0, "skin": "default"}
-    last_bonus = db[user_id].get("last_bonus", 0)
+    if uid not in db:
+        db[uid] = {"level": 0, "exp": 0, "last_fed": 0, "total_fed": 0, "name": name, "last_bonus": 0, "coins": 0, "skin": "default"}
+    
+    last_bonus = db[uid].get("last_bonus", 0)
     now = datetime.now().timestamp()
     if now - last_bonus < 86400:
         time_left = 86400 - (now - last_bonus)
-        await update.message.reply_text(f"Ты уже получал бонус. Жди {int(time_left // 3600)} ч. {int((time_left % 3600) // 60)} мин. 🕰")
+        await update.message.reply_text(f"Бонус уже получен. Жди {int(time_left // 3600)} ч. 🕰")
         return
-    db[user_id]["last_bonus"] = now
+        
+    db[uid]["last_bonus"] = now
     save_data(db)
-    await add_experience(user_id, username, 3)
-    bonus_text = random.choice(DAILY_BONUSES)
-    caption = f"🎁 <b>Ежедневный бонус!</b>\n\n{bonus_text}\n\n✨ +3 опыта и +3 рыбки 🐟"
+    await add_exp(uid, name, 3)
+    
+    text = f"🎁 <b>Бонус!</b>\n\n{random.choice(DAILY_BONUSES)}\n\n✨ +3 опыта и +3 рыбки 🐟"
     try:
-        current_skin = db[user_id].get("skin", "default")
-        await update.message.reply_photo(photo=SKINS[current_skin]["image"], caption=caption, parse_mode="HTML")
-    except Exception:
-        await update.message.reply_text(caption, parse_mode="HTML")
+        skin = db[uid].get("skin", "default")
+        await update.message.reply_photo(photo=SKINS[skin]["image"], caption=text, parse_mode="HTML")
+    except:
+        await update.message.reply_text(text, parse_mode="HTML")
 
-async def show_leaderboard(update: Update):
+async def show_top(update: Update):
     db = load_data()
     if not db:
-        await update.message.reply_text("Пока никто не играл. Будь первым!")
+        await update.message.reply_text("Топ пуст.")
         return
     sorted_users = sorted(db.items(), key=lambda x: (x[1].get('level', 0), x[1].get('exp', 0), x[1].get('total_fed', 0)), reverse=True)
     text = "🏆 <b>Топ игроков:</b>\n\n"
     for i, (uid, data) in enumerate(sorted_users[:5], 1):
-        text += f"{i}. <b>{data.get('name')}</b> — {get_level_name(data.get('level', 0))}, 🐟 {data.get('total_fed', 0)}\n"
+        text += f"{i}. <b>{data.get('name')}</b> — {level_name(data.get('level', 0))}, 🐟 {data.get('total_fed', 0)}\n"
     await update.message.reply_text(text, parse_mode="HTML")
 
 async def feed_cat(update: Update):
-    user_id = str(update.effective_user.id)
-    username = get_display_name(update.effective_user)
+    uid = str(update.effective_user.id)
+    name = get_name(update.effective_user)
     db = load_data()
-    if user_id not in db:
-        db[user_id] = {"level": 0, "exp": 0, "last_fed": 0, "total_fed": 0, "name": username, "last_bonus": 0, "coins": 0, "skin": "default"}
-    if datetime.now().timestamp() - db[user_id].get("last_fed", 0) < 300:
+    if uid not in db:
+        db[uid] = {"level": 0, "exp": 0, "last_fed": 0, "total_fed": 0, "name": name, "last_bonus": 0, "coins": 0, "skin": "default"}
+    
+    if datetime.now().timestamp() - db[uid].get("last_fed", 0) < 300:
         await update.message.reply_text("Я уже сыт. 😸")
         return
-    db[user_id]["last_fed"] = datetime.now().timestamp()
-    db[user_id]["total_fed"] = db[user_id].get("total_fed", 0) + 1
+        
+    db[uid]["last_fed"] = datetime.now().timestamp()
+    db[uid]["total_fed"] = db[uid].get("total_fed", 0) + 1
     save_data(db)
     
-    await add_experience(user_id, username, 2)
+    await add_exp(uid, name, 2)
     
-    caption = "😻 <b>Спасибо. Было вкусно.</b>\n💤\n\n✨ +2 опыта и +2 рыбки 🐟"
+    text = "😻 <b>Спасибо. Было вкусно.</b>\n💤\n\n✨ +2 опыта и +2 рыбки 🐟"
     try:
-        current_skin = db[user_id].get("skin", "default")
-        await update.message.reply_photo(photo=SKINS[current_skin]["image"], caption=caption, parse_mode="HTML")
-    except Exception:
-        await update.message.reply_text(caption, parse_mode="HTML")
+        skin = db[uid].get("skin", "default")
+        await update.message.reply_photo(photo=SKINS[skin]["image"], caption=text, parse_mode="HTML")
+    except:
+        await update.message.reply_text(text, parse_mode="HTML")
 
 async def show_stats(update: Update):
-    user_id = str(update.effective_user.id)
+    uid = str(update.effective_user.id)
     db = load_data()
-    if user_id not in db:
-        db[user_id] = {"level": 0, "exp": 0, "last_fed": 0, "total_fed": 0, "name": get_display_name(update.effective_user), "last_bonus": 0, "coins": 0, "skin": "default"}
+    if uid not in db:
+        db[uid] = {"level": 0, "exp": 0, "last_fed": 0, "total_fed": 0, "name": get_name(update.effective_user), "last_bonus": 0, "coins": 0, "skin": "default"}
         save_data(db)
-    data = db[user_id]
-    level = data["level"]
-    next_exp = LEVEL_UP_EXP.get(level, "MAX")
-    text = f"📊 <b>Статистика:</b>\n\n👤 Имя: <b>{data.get('name')}</b>\n🐱 Уровень: {get_level_name(level)}\n✨ Опыт: {data['exp']}/{next_exp}\n🐟 Рыбок: {data.get('coins', 0)}\n🐾 Кормлений: {data.get('total_fed', 0)}"
+        
+    data = db[uid]
+    lvl = data["level"]
+    next_exp = LEVEL_UP_EXP.get(lvl, "MAX")
+    text = f"📊 <b>Статистика:</b>\n\n👤 Имя: <b>{data.get('name')}</b>\n🐱 Уровень: {level_name(lvl)}\n✨ Опыт: {data['exp']}/{next_exp}\n🐟 Рыбок: {data.get('coins', 0)}\n🐾 Кормлений: {data.get('total_fed', 0)}"
     await update.message.reply_text(text, parse_mode="HTML")
 
 async def get_weather(update: Update, city=None):
     params = {"appid": WEATHER_API_KEY, "q": city, "units": "metric", "lang": "ru"}
     async with httpx.AsyncClient() as client:
         r = await client.get("https://api.openweathermap.org/data/2.5/weather", params=params)
+        
     if r.status_code == 200:
         data = r.json()
         temp = round(data['main']['temp'])
         desc = data['weather'][0]['description'].capitalize()
-        main_weather = data['weather'][0]['main']
+        weather = data['weather'][0]['main']
         
-        username = get_display_name(update.effective_user)
-        level, exp, leveled_up = await add_experience(update.effective_user.id, username, 1)
+        uid = str(update.effective_user.id)
+        name = get_name(update.effective_user)
+        lvl, exp, leveled_up = await add_exp(uid, name, 1)
         
-        user_id = str(update.effective_user.id)
         db = load_data()
-        current_skin = db[user_id].get("skin", "default")
-        cat_image = SKINS[current_skin]["image"]
+        skin = db[uid].get("skin", "default")
+        img = SKINS[skin]["image"]
         
-        time_passed = datetime.now().timestamp() - db[user_id].get("last_fed", 0)
+        passed = datetime.now().timestamp() - db[uid].get("last_fed", 0)
+        hungry = "\n\n😿 <b>Я голоден.</b>" if passed > 7200 else ""
+        phrase = "Покорми меня..." if passed > 7200 else cat_phrase(weather, lvl)
+        lvl_text = f"\n\n🎉 <b>Новый уровень: {level_name(lvl)}!</b>" if leveled_up else ""
+        exp_text = f"✨ Опыт: {exp}/{LEVEL_UP_EXP.get(lvl, 'MAX')}" if lvl < 3 else "✨ Опыт: MAX"
         
-        hunger_status = "\n\n😿 <b>Я голоден.</b>" if time_passed > 7200 else ""
-        cat_phrase = "Покорми меня..." if time_passed > 7200 else get_cat_phrase(main_weather, level)
-        level_up_text = f"\n\n🎉 <b>Новый уровень: {get_level_name(level)}!</b>" if leveled_up else ""
-        exp_text = f"✨ Опыт: {exp}/{LEVEL_UP_EXP.get(level, 'MAX')}" if level < 3 else "✨ Опыт: MAX"
-        coins_text = f"🐟 Рыбок: {db[user_id].get('coins', 0)}"
-
-        caption = (
+        text = (
             f"🌍 <b>{data['name']}</b>: {temp}°C, {desc}\n"
-            f"{get_advice(temp)}\n"
-            f"{WEATHER_TIPS.get(main_weather, WEATHER_TIPS['Default'])}\n\n"
-            f"🐱 <b>(Ур. {level} - {get_level_name(level)}):</b>\n"
-            f"<i>{cat_phrase}</i>{hunger_status}{level_up_text}\n\n{exp_text}\n{coins_text}"
+            f"{advice(temp)}\n"
+            f"{WEATHER_TIPS.get(weather, WEATHER_TIPS['Default'])}\n\n"
+            f"🐱 <b>(Ур. {lvl} - {level_name(lvl)}):</b>\n"
+            f"<i>{phrase}</i>{hungry}{lvl_text}\n\n{exp_text}\n🐟 Рыбок: {db[uid].get('coins', 0)}"
         )
+        
         try:
-            await update.message.reply_photo(photo=cat_image, caption=caption, parse_mode="HTML")
-        except Exception:
-            await update.message.reply_text(caption, parse_mode="HTML")
+            await update.message.reply_photo(photo=img, caption=text, parse_mode="HTML")
+        except:
+            await update.message.reply_text(text, parse_mode="HTML")
     else:
         await update.message.reply_text("❌ Город не найден.")
 
 async def prediction(update: Update):
-    await add_experience(update.effective_user.id, get_display_name(update.effective_user), 1)
-    pred = random.choice(PREDICTIONS)
-    caption = f"🐱 <b>Кот-предсказатель:</b>\n\n<i>{pred}</i>"
+    await add_exp(update.effective_user.id, get_name(update.effective_user), 1)
+    text = f"🐱 <b>Кот-предсказатель:</b>\n\n<i>{random.choice(PREDICTIONS)}</i>"
     try:
-        user_id = str(update.effective_user.id)
+        uid = str(update.effective_user.id)
         db = load_data()
-        current_skin = db[user_id].get("skin", "default")
-        await update.message.reply_photo(photo=SKINS[current_skin]["image"], caption=caption, parse_mode="HTML")
-    except Exception:
-        await update.message.reply_text(caption, parse_mode="HTML")
+        skin = db[uid].get("skin", "default")
+        await update.message.reply_photo(photo=SKINS[skin]["image"], caption=text, parse_mode="HTML")
+    except:
+        await update.message.reply_text(text, parse_mode="HTML")
 
 async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = update.message.text.lower()
     
-    if not await check_subscription(update.effective_user.id, context):
-        keyboard = [[InlineKeyboardButton("📢 Подписаться", url=f"https://t.me/{CHANNEL_USERNAME.replace('@', '')}")], [InlineKeyboardButton("✅ Я подписался", callback_data="check_sub")]]
-        await update.message.reply_text("Подпишись на канал. 👇", reply_markup=InlineKeyboardMarkup(keyboard))
+    if not await check_sub(update.effective_user.id, context):
+        kb = [[InlineKeyboardButton("📢 Подписаться", url=f"https://t.me/{CHANNEL_USERNAME.replace('@', '')}")], [InlineKeyboardButton("✅ Я подписался", callback_data="check_sub")]]
+        await update.message.reply_text("Подпишись на канал. 👇", reply_markup=InlineKeyboardMarkup(kb))
         return
 
-    greetings = ["привет", "здравствуй", "хай", "добрый день", "добрый вечер", "доброе утро", "приветик"]
-    if any(word in text for word in greetings):
-        await update.message.reply_text(f"Приветствую, {get_display_name(update.effective_user)}. Чем займемся? 🐱")
-        return
-    if "как дела" in text:
-        await update.message.reply_text("Всё в порядке. Наслаждаюсь покоем. 😸")
-        return
-    if "спасибо" in text or "благодарю" in text:
+    if any(w in text for w in ["привет", "здравствуй", "хай", "добрый день"]):
+        await update.message.reply_text(f"Приветствую, {get_name(update.effective_user)}. Чем займемся? 🐱")
+    elif "как дела" in text:
+        await update.message.reply_text("Всё в порядке. 😸")
+    elif "спасибо" in text or "благодарю" in text:
         await update.message.reply_text("Не за что. 😽")
-        return
-    if "пока" in text or "до свидания" in text:
+    elif "пока" in text or "до свидания" in text:
         await update.message.reply_text("До встречи. 🐾")
-        return
-
-    if "покормить" in text: await feed_cat(update)
+    elif "покормить" in text: await feed_cat(update)
     elif "предсказание" in text: await prediction(update)
     elif "статистика" in text: await show_stats(update)
-    elif "топ" in text: await show_leaderboard(update)
+    elif "топ" in text: await show_top(update)
     elif "бонус" in text: await daily_bonus(update)
     elif "гардероб" in text or "шубка" in text: await show_wardrobe(update)
-    elif "погода" in text: 
-        await update.message.reply_text("Какой город?")
+    elif "погода" in text: await update.message.reply_text("Какой город?")
     elif "ещё" in text or "меню" in text:
-        keyboard = [
-            [KeyboardButton("🔮 Предсказание"), KeyboardButton("📊 Статистика")],
-            [KeyboardButton("🎨 Гардероб"), KeyboardButton("🏆 Топ игроков")],
-            [KeyboardButton("⬅️ Назад")]
-        ]
-        await update.message.reply_text("Опции:", reply_markup=ReplyKeyboardMarkup(keyboard, resize_keyboard=True))
+        kb = [[KeyboardButton("🔮 Предсказание"), KeyboardButton("📊 Статистика")], [KeyboardButton("🎨 Гардероб"), KeyboardButton("🏆 Топ игроков")], [KeyboardButton("⬅️ Назад")]]
+        await update.message.reply_text("Опции:", reply_markup=ReplyKeyboardMarkup(kb, resize_keyboard=True))
     elif "назад" in text:
-        keyboard = [
-            [KeyboardButton("🌍 Погода"), KeyboardButton("🐟 Покормить котика")],
-            [KeyboardButton("🎁 Ежедневный бонус"), KeyboardButton("🎮 Ещё")]
-        ]
-        await update.message.reply_text("Главное меню:", reply_markup=ReplyKeyboardMarkup(keyboard, resize_keyboard=True))
-    elif text.startswith("🐱") or "мяу" in text: await update.message.reply_text("Мурр. 😽")
+        kb = [[KeyboardButton("🌍 Погода"), KeyboardButton("🐟 Покормить котика")], [KeyboardButton("🎁 Ежедневный бонус"), KeyboardButton("🎮 Ещё")]]
+        await update.message.reply_text("Главное меню:", reply_markup=ReplyKeyboardMarkup(kb, resize_keyboard=True))
+    elif text.startswith("🐱") or "мяу" in text: 
+        await update.message.reply_text("Мурр. 😽")
     else:
         context.user_data['last_city'] = update.message.text
         await get_weather(update, city=update.message.text)
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user_id = str(update.effective_user.id)
+    uid = str(update.effective_user.id)
     db = load_data()
-    if user_id not in db:
-        db[user_id] = {"level": 0, "exp": 0, "last_fed": 0, "total_fed": 0, "name": get_display_name(update.effective_user), "last_bonus": 0, "coins": 0, "skin": "default"}
+    if uid not in db:
+        db[uid] = {"level": 0, "exp": 0, "last_fed": 0, "total_fed": 0, "name": get_name(update.effective_user), "last_bonus": 0, "coins": 0, "skin": "default"}
         save_data(db)
 
-    if not await check_subscription(update.effective_user.id, context):
-        keyboard = [[InlineKeyboardButton("📢 Подписаться", url=f"https://t.me/{CHANNEL_USERNAME.replace('@', '')}")], [InlineKeyboardButton("✅ Я подписался", callback_data="check_sub")]]
-        await update.message.reply_text("Привет. Подпишись на канал. 👇", reply_markup=InlineKeyboardMarkup(keyboard))
+    if not await check_sub(uid, context):
+        kb = [[InlineKeyboardButton("📢 Подписаться", url=f"https://t.me/{CHANNEL_USERNAME.replace('@', '')}")], [InlineKeyboardButton("✅ Я подписался", callback_data="check_sub")]]
+        await update.message.reply_text("Привет. Подпишись на канал. 👇", reply_markup=InlineKeyboardMarkup(kb))
         return
 
-    keyboard = [
-        [KeyboardButton("🌍 Погода"), KeyboardButton("🐟 Покор
+    kb = [[KeyboardButton("🌍 Погода"), KeyboardButton("🐟 Покормить котика")], [KeyboardButton("🎁 Ежедневный бонус"), KeyboardButton("🎮 Ещё")]]
+    await update.message.reply_text("Приветствую. 👋 Напиши город или выбери кнопку.", reply_markup=ReplyKeyboardMarkup(kb, resize_keyboard=True))
+
+def main():
+    app = Application.builder().token(TELEGRAM_TOKEN).build()
+    app.add_handler(CommandHandler("start", start))
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_text))
+    app.add_handler(CallbackQueryHandler(button_callback))
+    app.add_handler(PreCheckoutQueryHandler(precheckout_callback))
+    app.add_handler(MessageHandler(filters.SUCCESSFUL_PAYMENT, success_payment))
+    
+    job = app.job_queue
+    job.run_daily(send_fact, time=time(hour=5, minute=0))
+    job.run_daily(send_evening, time=time(hour=17, minute=0))
+    
+    print("Бот запущен")
+    app.run_polling()
+
+if __name__ == "__main__":
+    main()
